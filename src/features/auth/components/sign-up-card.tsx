@@ -27,8 +27,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { registerSchema } from "../schemas";
+import { useEffect } from "react";
+import { useSignUpMutation } from "@/redux/features/auth/authApi";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const SignUpCard = () => {
+  const router = useRouter();
+  const [signUp, { data, error, isSuccess, isLoading }] = useSignUpMutation();
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -37,8 +44,24 @@ export const SignUpCard = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof registerSchema>) => {
-    console.log({ values });
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.msg;
+      router.push("/sign-in")
+      toast.success(message);
+    }
+    if (error) {
+      if ("data" in error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errorData = error as any;
+        const emailErrorMessage = errorData.data.errors.email ? errorData.data.errors.email[0] : errorData.data.errors.password;
+        toast.error(emailErrorMessage);
+      }
+    }
+  }, [isSuccess, error, data?.msg, router]);
+
+  const onSubmit = async (values: z.infer<typeof registerSchema>) => {
+    await signUp(values);
   };
 
   return (
@@ -93,7 +116,7 @@ export const SignUpCard = () => {
               )}
             />
             <FormField
-              name="password"
+              name="password2"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
@@ -108,7 +131,7 @@ export const SignUpCard = () => {
                 </FormItem>
               )}
             />
-            <Button disabled={false} size="lg" className="w-full">
+            <Button disabled={isLoading} size="lg" className="w-full">
               Register
             </Button>
           </form>
@@ -119,7 +142,7 @@ export const SignUpCard = () => {
       </div>
       <CardContent className="py-2 flex flex-col gap-y-4">
         <Button
-          disabled={false}
+          disabled={isLoading}
           variant="secondary"
           size="lg"
           className="w-full"
@@ -128,7 +151,7 @@ export const SignUpCard = () => {
           Login with Google
         </Button>
         <Button
-          disabled={false}
+          disabled={isLoading}
           variant="secondary"
           size="lg"
           className="w-full"
