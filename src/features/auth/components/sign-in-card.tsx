@@ -29,8 +29,15 @@ import {
 } from "@/components/ui/card";
 
 import { loginSchema } from "../schemas";
+import { useSignInMutation } from "@/redux/features/auth/authApi";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const SignInCard = () => {
+  const router = useRouter();
+  const [signIn, { data, isSuccess, error, isLoading }] = useSignInMutation();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -39,8 +46,26 @@ export const SignInCard = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof loginSchema>) => {
-    console.log({ values });
+  useEffect(() => {
+    if (isSuccess) {
+      const message = data?.msg;
+      router.push("/");
+      toast.success(message);
+    }
+    if (error) {
+      if ("data" in error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const errorData = error as any;
+        const emailErrorMessage = errorData.data.errors.email
+          ? errorData.data.errors.email[0]
+          : errorData.data.errors.password;
+        toast.error(emailErrorMessage);
+      }
+    }
+  }, [isSuccess, error, data?.msg, router]);
+
+  const onSubmit = async (values: z.infer<typeof loginSchema>) => {
+    await signIn(values);
   };
 
   return (
@@ -82,7 +107,7 @@ export const SignInCard = () => {
                 </FormItem>
               )}
             />
-            <Button disabled={false} size="lg" className="w-full">
+            <Button disabled={isLoading} size="lg" className="w-full">
               Login
             </Button>
           </form>
@@ -93,7 +118,7 @@ export const SignInCard = () => {
       </div>
       <CardContent className="py-2 flex flex-col gap-y-4">
         <Button
-          disabled={false}
+          disabled={isLoading}
           variant="secondary"
           size="lg"
           className="w-full"
@@ -102,7 +127,7 @@ export const SignInCard = () => {
           Login with Google
         </Button>
         <Button
-          disabled={false}
+          disabled={isLoading}
           variant="secondary"
           size="lg"
           className="w-full"

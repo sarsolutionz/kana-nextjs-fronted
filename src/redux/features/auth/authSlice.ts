@@ -1,22 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 const initialState = {
     access_token: null,
+    user: null,
 };
 
 const authSlice = createSlice({
-    name: "access_token",
+    name: "auth",
     initialState,
     reducers: {
-        setMemberToken: (state, action) => {
-            state.access_token = action.payload.access_token
+        setMember: (state, action) => {
+            state.access_token = action.payload.access_token;
+            state.user = action.payload.user;
         },
-        unSetMemberToken: (state, action) => {
-            state.access_token = action.payload.access_token
+        unSetMember: (state) => {
+            state.access_token = null;
+            state.user = null;
         },
-    }
+    },
 })
 
-export const { setMemberToken, unSetMemberToken } = authSlice.actions;
+export const { setMember, unSetMember } = authSlice.actions;
 
-export default authSlice.reducer;
+const persistConfig = {
+    key: "auth",
+    storage,
+}
+
+export const authReducer = persistReducer(persistConfig, authSlice.reducer);
+
+// export default authSlice.reducer;

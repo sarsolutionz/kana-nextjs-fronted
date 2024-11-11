@@ -1,14 +1,21 @@
 "use client"
 
-import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./features/api/apiSlice";
-import authSlice from "@/redux/features/auth/authSlice";
+import { persistStore } from "redux-persist";
+import { configureStore } from "@reduxjs/toolkit";
 
-export const store = configureStore({
+import { authReducer } from "@/redux/features/auth/authSlice";
+import userReducer from "@/redux/features/auth/memberSlice";
+
+const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
-        auth: authSlice,
+        auth: authReducer,
+        user: userReducer,
     },
     devTools: false,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware)
 })
+
+export const persistor = persistStore(store);
+export default store;

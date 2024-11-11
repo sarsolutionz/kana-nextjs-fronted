@@ -1,7 +1,19 @@
-import { SignUpCard } from "@/features/auth/components/sign-up-card";
+'use client'
+
 import Image from "next/image";
+import { redirect } from "next/navigation";
+import { useSelector } from "react-redux";
+
+import { SignUpCard } from "@/features/auth/components/sign-up-card";
 
 const SignUpPage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useSelector((state: any) => state.auth.user);
+
+  if (user) {
+    redirect("/")
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
       <SignUpCard />
