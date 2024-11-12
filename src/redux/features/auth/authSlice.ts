@@ -4,7 +4,8 @@ import storage from "redux-persist/lib/storage";
 
 const initialState = {
     access_token: null,
-    user: null,
+    user: false,  // to track authentication status
+    email: null,
 };
 
 const authSlice = createSlice({
@@ -14,10 +15,12 @@ const authSlice = createSlice({
         setMember: (state, action) => {
             state.access_token = action.payload.access_token;
             state.user = action.payload.user;
+            state.email = action.payload.email;
         },
         unSetMember: (state) => {
             state.access_token = null;
-            state.user = null;
+            state.user = false;
+            state.email = null;
         },
     },
 })
