@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 const routes = [
   {
     label: "Dashboard",
-    href: "",
+    href: "/",
     icon: LayoutDashboard,
     activeIcon: LayoutDashboard,
   },

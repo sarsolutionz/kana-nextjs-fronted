@@ -1,9 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 import { Loader, LogOut } from "lucide-react";
+import { useCallback, useEffect } from "react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
@@ -14,30 +17,53 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 
-import { useSignOutMutation } from "@/redux/features/auth/authApi";
+import {
+  useGetMemberInfoMutation,
+  useSignOutMutation,
+} from "@/redux/features/auth/authApi";
 
 export const UserButton = () => {
-  const email = useSelector((state: any) => state.auth.email);
+  const router = useRouter();
   const access_token = useSelector((state: any) => state.auth.access_token);
+  const memberInfo = useSelector((state: any) => state.user);
 
-  const [signOut, { isLoading }] = useSignOutMutation();
+  const [signOut, { isLoading: isSignOutLoading }] = useSignOutMutation();
+  const [getMemberInfo, { isLoading: isMemberLoading }] =
+    useGetMemberInfoMutation();
+
+  const fetchMemberInfo = useCallback(async () => {
+    try {
+      await getMemberInfo(access_token.access);
+    } catch (error: any) {
+      toast.error(error);
+    }
+  }, [getMemberInfo]);
+
+  useEffect(() => {
+    fetchMemberInfo();
+  }, [fetchMemberInfo]);
+
+  const isLoading = isSignOutLoading || isMemberLoading;
 
   if (isLoading) {
     <div className="h-full flex items-center justify-center">
       <Loader className="size-6 animate-spin text-muted-foreground" />
-    </div>;
-  }
+    </div>
+  };
 
   const handleLogout = async () => {
     await signOut(access_token.access);
+    router.push("/sign-in");
     toast.success("Log out successfully");
   };
 
-  if (!email) {
+  if (!memberInfo.email) {
     return null;
   }
 
-  const avatarFallback = email ? email.charAt(0).toUpperCase() : "U";
+  const avatarFallback = memberInfo?.name
+    ? memberInfo?.name.charAt(0).toUpperCase()
+    : memberInfo?.email.charAt(0).toUpperCase() ?? "U";
 
   return (
     <DropdownMenu modal={false}>
@@ -62,9 +88,9 @@ export const UserButton = () => {
           </Avatar>
           <div className="flex flex-col items-center justify-center">
             <p className="text-sm font-medium text-neutral-900">
-              {email || "User"}
+              {memberInfo.name || "User"}
             </p>
-            <p className="text-xs text-neutral-500">{email}</p>
+            <p className="text-xs text-neutral-500">{memberInfo.email}</p>
           </div>
         </div>
         <Separator className="mb-1" />

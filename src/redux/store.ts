@@ -5,13 +5,13 @@ import { persistStore } from "redux-persist";
 import { configureStore } from "@reduxjs/toolkit";
 
 import { authReducer } from "@/redux/features/auth/authSlice";
-import userReducer from "@/redux/features/auth/memberSlice";
+import memberReducer from "@/redux/features/auth/memberSlice";
 
 const store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
         auth: authReducer,
-        user: userReducer,
+        user: memberReducer,
     },
     devTools: false,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware)

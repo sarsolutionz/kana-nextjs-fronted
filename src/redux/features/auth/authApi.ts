@@ -1,5 +1,6 @@
 import { apiSlice } from "../api/apiSlice";
 import { setMember, unSetMember } from "./authSlice";
+import { setMemberInfo } from "./memberSlice";
 
 export const authApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -62,7 +63,31 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             }
         }),
+        getMemberInfo: builder.mutation({
+            query: (access_token) => ({
+                url: "profile",
+                method: "GET",
+                credentials: "include" as const,
+                headers: {
+                    'Authorization': `Bearer ${access_token}`,
+                }
+            }),
+            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+                try {
+                    const result = await queryFulfilled;
+                    dispatch(
+                        setMemberInfo({
+                            email: result.data.email,
+                            name: result.data.name,
+                        })
+                    )
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                } catch (error: any) {
+                    console.log(error)
+                }
+            }
+        }),
     }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useSignOutMutation } = authApi;
+export const { useSignUpMutation, useSignInMutation, useSignOutMutation, useGetMemberInfoMutation } = authApi;
