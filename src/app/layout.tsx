@@ -5,6 +5,7 @@ import "./globals.css";
 import { Providers } from "./Provider";
 
 import { Toaster } from "@/components/ui/sonner";
+import { SheetProvider } from "@/providers/sheet-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -33,6 +34,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
+          <SheetProvider />
           <Toaster />
           {children}
         </Providers>

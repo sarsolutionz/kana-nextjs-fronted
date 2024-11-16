@@ -1,0 +1,15 @@
+import { z } from "zod";
+import { VehicleType } from "./types";
+
+export const VehicleInfoSchema = z.object({
+    model: z.string().min(1, "Required"),
+    name: z.string().min(1, "Required"),
+    number: z.string().regex(/^\d{10}$/, "Number must be a valid 10-digit phone number"),
+    address: z.string().min(1, "Required"),
+    vehicle_type: z.nativeEnum(VehicleType, { required_error: "Required" }),
+    vehicle_number: z.string().regex(
+        /^[A-Z]{2}-\d{2}-[A-Z]{2}-\d{4}$/,
+        "Vehicle number must follow the format (e.g., GJ-05-ES-9658)"
+    ),
+    capacity: z.number().min(0.1, "Capacity must be at least 0.1"),
+})
