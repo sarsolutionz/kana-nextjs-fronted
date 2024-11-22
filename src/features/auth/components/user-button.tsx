@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { toast } from "sonner";
@@ -22,10 +20,12 @@ import {
   useSignOutMutation,
 } from "@/redux/features/auth/authApi";
 
+import { RootState } from "@/redux/store";
+
 export const UserButton = () => {
   const router = useRouter();
-  const access_token = useSelector((state: any) => state.auth.access_token);
-  const memberInfo = useSelector((state: any) => state.user);
+  const access_token = useSelector((state: RootState) => state.auth.access_token?.access);
+  const memberInfo = useSelector((state: RootState) => state.user);
 
   const [signOut, { isLoading: isSignOutLoading }] = useSignOutMutation();
   const [getMemberInfo, { isLoading: isMemberLoading }] =
@@ -33,11 +33,12 @@ export const UserButton = () => {
 
   const fetchMemberInfo = useCallback(async () => {
     try {
-      await getMemberInfo(access_token.access);
-    } catch (error: any) {
-      toast.error(error);
+      await getMemberInfo(access_token);
+    } catch (error) {
+      const typedError = error as Error;
+      toast.error(typedError?.message);
     }
-  }, [getMemberInfo]);
+  }, [getMemberInfo, access_token]);
 
   useEffect(() => {
     fetchMemberInfo();
@@ -52,7 +53,7 @@ export const UserButton = () => {
   };
 
   const handleLogout = async () => {
-    await signOut(access_token.access);
+    await signOut(access_token);
     router.push("/sign-in");
     toast.success("Log out successfully");
   };

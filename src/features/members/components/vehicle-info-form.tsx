@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { z } from "zod";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useEffect, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { apiSchema } from "../schemas";
 import { VehicleInfoSchema } from "../schemas";
+
 import {
   Form,
   FormControl,
@@ -19,60 +25,69 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
 import { VehicleType } from "../types";
-import { useCreateVehicleMutation } from "@/redux/features/vehicle/vehicleApi";
-import { toast } from "sonner";
-import { useEffect } from "react";
 
-type FormValues = z.infer<typeof VehicleInfoSchema>;
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
+type FormValues = z.input<typeof VehicleInfoSchema>;
+type ApiFormValues = z.input<typeof apiSchema>;
 interface VehicleInfoFormProps {
-  onCancel?: () => void;
+  id?: string;
+  data: any;
+  isSuccess: boolean;
+  error: FetchBaseQueryError | SerializedError | undefined;
+  isLoading: boolean;
+  defaultValues?: FormValues;
+  onSubmit: (values: ApiFormValues) => void;
 }
 
-export const VehicleInfoForm = ({onCancel}: VehicleInfoFormProps) => {
-  const [createVehicle, { data, isSuccess, error, isLoading }] =
-    useCreateVehicleMutation();
-
+export const VehicleInfoForm = ({
+  id,
+  data,
+  isSuccess,
+  isLoading,
+  error,
+  defaultValues,
+  onSubmit,
+}: VehicleInfoFormProps) => {
   const form = useForm<FormValues>({
     resolver: zodResolver(VehicleInfoSchema),
-    defaultValues: {
-      model: "",
-      name: "",
-      number: "",
-      address: "",
-      vehicle_type: VehicleType.DEFAULT,
-      vehicle_number: "",
-      capacity: undefined,
-    },
+    defaultValues: defaultValues,
   });
 
+  const successToastShown = useRef(false);
+
   useEffect(() => {
-    if (isSuccess) {
-      const msg = data.message;
-      toast.success(msg)
-      form.reset();
-      onCancel?.();
+    if (isSuccess && data) {
+      if (!successToastShown.current) {
+        successToastShown.current = true;
+        const msg = data.message;
+        if (msg === undefined) return;
+        toast.success(msg);
+      }
+      form.reset(defaultValues);
     }
     if (error) {
       if ("data" in error) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const errorData = error as any;
-        const emailErrorMessage = errorData.data.errors.error
-        toast.error(emailErrorMessage);
+        const errorMessage = errorData.data.errors.error;
+        toast.error(errorMessage);
       }
     }
-  }, [isSuccess, data, error, form])
-  
+  }, [isSuccess, data, error, form, defaultValues]);
 
-  const onSubmit = async (values: FormValues) => {
-    await createVehicle(values);
-    
+  const handleSubmit = async (values: FormValues) => {
+    await onSubmit(values);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 pt-4">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-4 pt-4"
+      >
         <FormField
           control={form.control}
           name="name"
@@ -131,7 +146,7 @@ export const VehicleInfoForm = ({onCancel}: VehicleInfoFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Vehicle Type</FormLabel>
-              <Select defaultValue={field.value} onValueChange={field.onChange}>
+              <Select value={field.value} onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select an vehicle type" />
@@ -182,7 +197,7 @@ export const VehicleInfoForm = ({onCancel}: VehicleInfoFormProps) => {
           )}
         />
         <Button className="w-full" disabled={isLoading}>
-          {false ? "Save changes" : "Create Vehicle Info"}
+          {id ? "Save changes" : "Create Vehicle Info"}
         </Button>
       </form>
     </Form>

@@ -1,11 +1,30 @@
-'use client'
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { useCreateVehicleModal } from "@/features/members/hooks/use-create-vehicle-modal";
+"use client";
+
+import { useEffect } from "react";
 import { Plus } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { useCreateVehicleModal } from "@/features/members/hooks/use-create-vehicle-modal";
+import { useGetAllVehicleInfoQuery } from "@/redux/features/vehicle/vehicleApi";
+
+import { columns } from "./columns";
+import { DataTable } from "@/components/data-table";
+
 const MembersPage = () => {
-    const {open} = useCreateVehicleModal()
+  const { open } = useCreateVehicleModal();
+  const { data, isLoading, refetch } = useGetAllVehicleInfoQuery(
+    {},
+    { refetchOnMountOrArgChange: true }
+  );
+
+  useEffect(() => {
+    if (data) {
+      refetch();
+    }
+  }, [data, refetch]);
+
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10">
       <Card className="border drop-shadow-sm">
@@ -20,6 +39,15 @@ const MembersPage = () => {
             </Button>
           </div>
         </CardHeader>
+        <CardContent>
+          <DataTable
+            columns={columns}
+            data={data || []}
+            filterKey="location"
+            // TODO: Notification Alert
+            disabled={isLoading}
+          />
+        </CardContent>
       </Card>
     </div>
   );

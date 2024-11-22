@@ -1,13 +1,16 @@
 "use client";
 
+import { RootState } from "@/redux/store";
 import { redirect } from "next/navigation";
 import { useSelector } from "react-redux";
 
 export default function Home() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const user = useSelector((state: any) => state.auth.user);
+  const user = useSelector((state: RootState) => state.auth.user);
+  const access_token = useSelector(
+    (state: RootState) => state.auth.access_token?.access
+  );
 
-  if (!user) redirect("/sign-in");
+  if (!user || !access_token) redirect("/sign-in");
 
   return <div>Dashboard</div>;
 }

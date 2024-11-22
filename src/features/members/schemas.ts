@@ -13,3 +13,14 @@ export const VehicleInfoSchema = z.object({
     ),
     capacity: z.number().min(0.1, "Capacity must be at least 0.1"),
 })
+
+export const apiSchema = z.object({
+    id: z.string().optional(),
+    model: z.string(),
+    name: z.string(),
+    number: z.string(),
+    address: z.string(),
+    vehicle_type: z.nativeEnum(VehicleType),
+    vehicle_number: z.string(),
+    capacity: z.number(),
+});

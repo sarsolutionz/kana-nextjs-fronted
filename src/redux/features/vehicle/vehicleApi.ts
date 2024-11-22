@@ -8,8 +8,24 @@ export const vehicleApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: data,
             }),
+            invalidatesTags: ["Vehicle"]
         }),
+        getAllVehicleInfo: builder.query({
+            query: () => ({
+                url: "member/all-vehicle-info",
+                method: "GET",
+                credentials: "include" as const,
+            }),
+            providesTags: ["Vehicle"],
+        }),
+        getByIdVehicleInfo: builder.query({
+            query: (id) => ({
+                url: `member/vehicle?vehicle_id=${id}`,
+                method: "GET",
+                credentials: "include" as const,
+            })
+        })
     })
 })
 
-export const { useCreateVehicleMutation } = vehicleApi;
+export const { useCreateVehicleMutation, useGetAllVehicleInfoQuery, useGetByIdVehicleInfoQuery } = vehicleApi;
