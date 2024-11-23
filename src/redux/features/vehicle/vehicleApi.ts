@@ -23,9 +23,17 @@ export const vehicleApi = apiSlice.injectEndpoints({
                 url: `member/vehicle?vehicle_id=${id}`,
                 method: "GET",
                 credentials: "include" as const,
-            })
-        })
+            }),
+        }),
+        editVehicleInfo: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `member/update-vehicle?vehicle_id=${id}`,
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["Vehicle"],
+        }),
     })
 })
 
-export const { useCreateVehicleMutation, useGetAllVehicleInfoQuery, useGetByIdVehicleInfoQuery } = vehicleApi;
+export const { useCreateVehicleMutation, useGetAllVehicleInfoQuery, useGetByIdVehicleInfoQuery, useEditVehicleInfoMutation } = vehicleApi;

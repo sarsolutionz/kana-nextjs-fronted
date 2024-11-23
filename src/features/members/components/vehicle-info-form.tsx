@@ -28,8 +28,8 @@ import { Button } from "@/components/ui/button";
 
 import { VehicleType } from "../types";
 
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 
 type FormValues = z.input<typeof VehicleInfoSchema>;
 type ApiFormValues = z.input<typeof apiSchema>;
@@ -72,7 +72,7 @@ export const VehicleInfoForm = ({
     if (error) {
       if ("data" in error) {
         const errorData = error as any;
-        const errorMessage = errorData.data.errors.error;
+        const errorMessage = errorData?.data?.errors?.error;
         toast.error(errorMessage);
       }
     }

@@ -43,7 +43,7 @@ const MembersPage = () => {
           <DataTable
             columns={columns}
             data={data || []}
-            filterKey="location"
+            filterKey="address"
             // TODO: Notification Alert
             disabled={isLoading}
           />

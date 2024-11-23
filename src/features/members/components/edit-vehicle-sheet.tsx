@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
-import { useOpenMember } from "../hooks/use-open-member";
-import { VehicleInfoSchema } from "../schemas";
+
 import { skipToken } from "@reduxjs/toolkit/query";
+import { VehicleInfoSchema } from "../schemas";
 
 import {
   Sheet,
@@ -13,9 +13,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
+import { useOpenMember } from "../hooks/use-open-member";
 import { VehicleInfoForm } from "./vehicle-info-form";
 
-import { useGetByIdVehicleInfoQuery } from "@/redux/features/vehicle/vehicleApi";
+import {
+  useEditVehicleInfoMutation,
+  useGetByIdVehicleInfoQuery,
+} from "@/redux/features/vehicle/vehicleApi";
 
 import { VehicleType } from "../types";
 
@@ -34,16 +38,24 @@ export const EditVehicleSheet = () => {
     refetchOnMountOrArgChange: true,
   });
 
+  const [
+    editVehicleInfo,
+    { isSuccess: editSuccess, error: editError, isLoading: editIsLoading },
+  ] = useEditVehicleInfoMutation();
+
   useEffect(() => {
-    if (id && memberSuccess) {
+    if (id && memberSuccess && editSuccess) {
       memberRefetch();
     }
-  }, [id, memberSuccess, memberRefetch]);
+  }, [id, memberSuccess, memberRefetch, editSuccess]);
 
-  const isLoading = memberLoading;
+  const error = memberError || editError;
+  const isSuccess = memberSuccess || editSuccess;
+  const isLoading = memberLoading || editIsLoading;
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values);
+  const onSubmit = async (values: FormValues) => {
+    await editVehicleInfo({ id, data: values });
+    onClose();
   };
 
   const defaultValues = memberData
@@ -83,9 +95,9 @@ export const EditVehicleSheet = () => {
               key={id}
               id={id}
               data={memberData}
-              isSuccess={memberSuccess}
-              isLoading={memberLoading}
-              error={memberError}
+              isSuccess={isSuccess}
+              isLoading={isLoading}
+              error={error}
               defaultValues={defaultValues}
               onSubmit={onSubmit}
             />

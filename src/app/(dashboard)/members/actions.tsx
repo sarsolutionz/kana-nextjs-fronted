@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Edit, MoreHorizontal } from "lucide-react";
+import { BellPlus, Edit, MoreHorizontal } from "lucide-react";
 
 import { useOpenMember } from "@/features/members/hooks/use-open-member";
 
@@ -29,6 +29,10 @@ export const Actions = ({ id }: ActionsProps) => {
         <DropdownMenuItem disabled={false} onClick={() => onOpen(id)}>
           <Edit className="size-4 mr-2" />
           Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem disabled={false} onClick={() => {}}>
+          <BellPlus className="size-4 mr-2" />
+          Send Alert
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
