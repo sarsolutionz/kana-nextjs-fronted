@@ -6,17 +6,29 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: "http://46.202.162.117:8000/api/",
         prepareHeaders(headers, { getState }) {
+            // Retrieve access token from state
             const accessToken = (getState() as RootState)?.auth?.access_token?.access;
 
+            // Set the Authorization header if the access token exists
             if (accessToken) {
-                headers.set('Authorization', `Bearer ${accessToken}`); // Add Bearer token to headers
+                headers.set('Authorization', `Bearer ${accessToken}`);
+            }
+
+            // Retrieve CSRF token from cookies (adjust cookie name if necessary)
+            const csrfToken = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('csrftoken='))
+                ?.split('=')[1];
+
+            // Set CSRF token header if it exists
+            if (csrfToken) {
+                headers.set('X-CSRFToken', csrfToken);
             }
 
             return headers;
         },
     }),
     tagTypes: ["Vehicle"],
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     endpoints: (builder) => ({}),
 });
 
