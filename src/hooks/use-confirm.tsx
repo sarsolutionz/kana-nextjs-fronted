@@ -19,12 +19,9 @@ export const useConfirm = (
   } | null>(null);
 
   const confirm = () =>
-    new Promise<{ resolve: () => void } | null>((resolve) => {
-      // If setPromise is intended to toggle a boolean state, change this line:
-      setPromise(true);  // Or any boolean value depending on your logic
-      resolve();  // Resolve the promise
+    new Promise((resolve) => {
+      setPromise({ resolve });
     });
-
 
   const handleClose = () => {
     setPromise(null);
