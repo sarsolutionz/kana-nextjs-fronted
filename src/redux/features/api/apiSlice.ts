@@ -1,15 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../auth/authSlice";
 
-// Helper function to get CSRF token from cookies
-function getCSRFToken() {
-    const csrfToken = document.cookie.split(';').find(cookie => cookie.trim().startsWith('csrftoken='));
-    if (csrfToken) {
-        return csrfToken.split('=')[1];
-    }
-    return null;
-}
-
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
@@ -17,20 +8,16 @@ export const apiSlice = createApi({
         prepareHeaders(headers, { getState }) {
             const accessToken = (getState() as RootState)?.auth?.access_token?.access;
 
-            // Add Authorization header if the access token is available
             if (accessToken) {
-                headers.set('Authorization', `Bearer ${accessToken}`);
-            }
-
-            // Add CSRF token if available
-            const csrfToken = getCSRFToken();
-            if (csrfToken) {
-                headers.set('X-CSRFToken', csrfToken); // Add CSRF token to request header
+                headers.set('Authorization', `Bearer ${accessToken}`); // Add Bearer token to headers
             }
 
             return headers;
         },
     }),
     tagTypes: ["Vehicle"],
-    // No endpoints defined, so remove this part if unused
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    endpoints: (builder) => ({}),
 });
+
+export const { } = apiSlice;
