@@ -26,7 +26,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Bell, BellPlus } from "lucide-react";
+import { BellPlus } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -66,7 +73,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-2">
         <Input
           placeholder={`Filter by ${filterKey}...`}
           value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
@@ -75,6 +82,49 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <Input
+          placeholder={`Filter by ${"model"}...`}
+          value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("model")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <Input
+          placeholder={`Filter by ${"capacity"}...`}
+          value={
+            (table.getColumn("capacity")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("capacity")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <Select
+          onValueChange={(value) => {
+            if (value === "all") {
+              table.getColumn("vehicle_type")?.setFilterValue("");
+            } else {
+              table.getColumn("vehicle_type")?.setFilterValue(value);
+            }
+          }}
+        >
+          <SelectTrigger className="w-[200px]">
+            <SelectValue placeholder="Vehicle Type" />
+          </SelectTrigger>
+          <SelectContent align="end">
+            <SelectItem value="all" className="text-center">
+              All
+            </SelectItem>
+            <SelectItem value="open" className="text-center">
+              Open
+            </SelectItem>
+            <SelectItem value="close" className="text-center">
+              Close
+            </SelectItem>
+          </SelectContent>
+        </Select>
+
         {table.getFilteredSelectedRowModel().rows.length > 0 && (
           <Button
             disabled={disabled}
