@@ -20,7 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Loader } from "lucide-react";
 
 interface TableProps<TData> {
-  table: Table<TData>;
+  table?: Table<TData>;
 }
 
 export const FiltersInfo = <TData,>({ table }: TableProps<TData>) => {
