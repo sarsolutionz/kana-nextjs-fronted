@@ -17,10 +17,9 @@ import {
 
 import { useFilterInfoModal } from "../hooks/use-filter-info-modal";
 import { Input } from "@/components/ui/input";
-import { Loader } from "lucide-react";
 
 interface TableProps<TData> {
-  table?: Table<TData>;
+  table: Table<TData>;
 }
 
 export const FiltersInfo = <TData,>({ table }: TableProps<TData>) => {
@@ -30,14 +29,6 @@ export const FiltersInfo = <TData,>({ table }: TableProps<TData>) => {
     setOpen(false);
   };
 
-  if (!table) {
-    return (
-      <div className="absolute inset-0 flex items-center justify-center">
-        <Loader className="size-4 text-muted-foreground animate-spin" />
-      </div>
-    );
-  }
-
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
@@ -46,39 +37,41 @@ export const FiltersInfo = <TData,>({ table }: TableProps<TData>) => {
         </DialogHeader>
         <Input
           placeholder={`Filter by ${"address"}...`}
-          value={(table.getColumn("address")?.getFilterValue() as string) ?? ""}
+          value={
+            (table?.getColumn("address")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("address")?.setFilterValue(event.target.value)
+            table?.getColumn("address")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Input
           placeholder={`Filter by ${"model"}...`}
-          value={(table.getColumn("model")?.getFilterValue() as string) ?? ""}
+          value={(table?.getColumn("model")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("model")?.setFilterValue(event.target.value)
+            table?.getColumn("model")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Input
           placeholder={`Filter by ${"capacity"}...`}
           value={
-            (table.getColumn("capacity")?.getFilterValue() as string) ?? ""
+            (table?.getColumn("capacity")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("capacity")?.setFilterValue(event.target.value)
+            table?.getColumn("capacity")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
         <Input
           placeholder={`Filter by ${"vehicle no"}...`}
           value={
-            (table.getColumn("vehicle_number")?.getFilterValue() as string) ??
+            (table?.getColumn("vehicle_number")?.getFilterValue() as string) ??
             ""
           }
           onChange={(event) =>
             table
-              .getColumn("vehicle_number")
+              ?.getColumn("vehicle_number")
               ?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
@@ -86,9 +79,9 @@ export const FiltersInfo = <TData,>({ table }: TableProps<TData>) => {
         <Select
           onValueChange={(value) => {
             if (value === "all") {
-              table.getColumn("vehicle_type")?.setFilterValue("");
+              table?.getColumn("vehicle_type")?.setFilterValue("");
             } else {
-              table.getColumn("vehicle_type")?.setFilterValue(value);
+              table?.getColumn("vehicle_type")?.setFilterValue(value);
             }
           }}
         >

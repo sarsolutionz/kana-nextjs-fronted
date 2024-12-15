@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BellPlus } from "lucide-react";
+import { BellPlus, Loader } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { FiltersInfo } from "@/features/members/components/filters-info";
+import { Modals } from "./modals";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -104,10 +105,13 @@ export function DataTable<TData, TValue>({
         <Input
           placeholder={`Filter by ${"vehicle no"}...`}
           value={
-            (table.getColumn("vehicle_number")?.getFilterValue() as string) ?? ""
+            (table.getColumn("vehicle_number")?.getFilterValue() as string) ??
+            ""
           }
           onChange={(event) =>
-            table.getColumn("vehicle_number")?.setFilterValue(event.target.value)
+            table
+              .getColumn("vehicle_number")
+              ?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -136,7 +140,13 @@ export function DataTable<TData, TValue>({
           </SelectContent>
         </Select>
 
-        <FiltersInfo table={table} />
+        {table ? (
+          <Modals table={table} />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loader className="size-4 text-muted-foreground animate-spin" />
+          </div>
+        )}
 
         {table.getFilteredSelectedRowModel().rows.length > 0 && (
           <Button
