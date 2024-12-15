@@ -19,7 +19,7 @@ import { useFilterInfoModal } from "../hooks/use-filter-info-modal";
 import { Input } from "@/components/ui/input";
 
 interface TableProps<TData> {
-  table: Table<TData>;
+  table?: Table<TData>;
 }
 
 export const FiltersInfo = <TData,>({ table }: TableProps<TData>) => {

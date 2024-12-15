@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { FiltersInfo } from "@/features/members/components/filters-info";
 
 interface TableProps<TData> {
-  table: Table<TData>;
+  table?: Table<TData>;
 }
 
 export const Modals = <TData,>({ table }: TableProps<TData>) => {
