@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import { Modals } from "@/components/modals";
+import { JotaiProvider } from "@/components/jotai-provider";
 import { Providers } from "./Provider";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -33,11 +35,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          <SheetProvider />
-          <Toaster />
-          {children}
-        </Providers>
+        <JotaiProvider>
+          <Providers>
+            <SheetProvider />
+            <Toaster />
+            <Modals />
+            {children}
+          </Providers>
+        </JotaiProvider>
       </body>
     </html>
   );

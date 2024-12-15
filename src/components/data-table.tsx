@@ -34,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { FiltersInfo } from "@/features/members/components/filters-info";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -73,7 +74,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 gap-2">
+      <div className="hidden md:flex items-center py-4 gap-2">
         <Input
           placeholder={`Filter by ${filterKey}...`}
           value={(table.getColumn(filterKey)?.getFilterValue() as string) ?? ""}
@@ -97,6 +98,16 @@ export function DataTable<TData, TValue>({
           }
           onChange={(event) =>
             table.getColumn("capacity")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        />
+        <Input
+          placeholder={`Filter by ${"vehicle no"}...`}
+          value={
+            (table.getColumn("vehicle_number")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("vehicle_number")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -124,6 +135,8 @@ export function DataTable<TData, TValue>({
             </SelectItem>
           </SelectContent>
         </Select>
+
+        <FiltersInfo table={table} />
 
         {table.getFilteredSelectedRowModel().rows.length > 0 && (
           <Button
