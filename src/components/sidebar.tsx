@@ -21,7 +21,9 @@ export const Sidebar = () => {
       <Separator className="my-4" />
       <Navigation />
       <div className="flex flex-col items-start justify-start mt-auto gap-2.5 p-2.5">
-        <UserButton />
+        <div className="block">
+          <UserButton />
+        </div>
       </div>
     </aside>
   );
