@@ -63,7 +63,7 @@ const MemberIdPage = () => {
       return {
         id: item.id,
         name: item.description,
-        imgSrc: `${process.env.NEXT_PUBLIC_SERVER_URI}/${item.image}`,
+        imgSrc: `${process.env.NEXT_PUBLIC_SERVER_URI}${item.image}`,
       };
     }) ?? [];
 
