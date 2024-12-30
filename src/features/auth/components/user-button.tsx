@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { toast } from "sonner";
@@ -76,7 +77,7 @@ export const UserButton = () => {
       }
       dispatch(setMemberInfo(response)); // Update Redux state
       setIsFetched(true); // Mark as fetched
-    } catch (error: any) {
+    } catch {
       toast.error("Session expired. Please log in again.");
       handleLogout(); 
     }
