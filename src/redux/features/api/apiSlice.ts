@@ -4,7 +4,7 @@ import { RootState } from "../auth/authSlice";
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://46.202.162.117:8000/api/",
+        baseUrl: "https://api.kanalogistics.co/api/",
         prepareHeaders(headers, { getState }) {
             const accessToken = (getState() as RootState)?.auth?.access_token?.access;
 
@@ -15,7 +15,7 @@ export const apiSlice = createApi({
             return headers;
         },
     }),
-    tagTypes: ["Vehicle"],
+    tagTypes: ["Vehicle", "VehicleDocs"],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     endpoints: (builder) => ({}),
 });
