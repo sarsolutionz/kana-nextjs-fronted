@@ -19,3 +19,21 @@ export type Testimonial = {
     pdfSrc?: string;
     videoSrc?: string;
 };
+
+export enum VehicleStatus {
+    IN_PROGRESS = "IN_PROGRESS",
+    IN_COMPLETE = "IN_COMPLETE",
+    COMPLETED = "COMPLETED",
+}
+
+export type VehicleData = {
+    id: string;
+    model: string;
+    name: string;
+    number: string;
+    address: string;
+    vehicle_type: VehicleType.DEFAULT;
+    vehicle_number: string;
+    capacity: number;
+    status: VehicleStatus;
+};

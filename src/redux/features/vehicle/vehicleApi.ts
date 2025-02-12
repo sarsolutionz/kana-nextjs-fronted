@@ -24,6 +24,7 @@ export const vehicleApi = apiSlice.injectEndpoints({
                 method: "GET",
                 credentials: "include" as const,
             }),
+            providesTags: ["Vehicle"],
         }),
         editVehicleInfo: builder.mutation({
             query: ({ id, data }) => ({
@@ -39,7 +40,7 @@ export const vehicleApi = apiSlice.injectEndpoints({
                 method: "POST",
                 body: formData,
             }),
-            invalidatesTags: ["Vehicle"]
+            invalidatesTags: ["VehicleDocs"],
         }),
         getByIdVehicleDoc: builder.query({
             query: (id) => ({
@@ -47,6 +48,7 @@ export const vehicleApi = apiSlice.injectEndpoints({
                 method: "GET",
                 credentials: "include" as const,
             }),
+            providesTags: ["VehicleDocs"],
         }),
         deleteVehicleDoc: builder.mutation({
             query: (payload) => ({

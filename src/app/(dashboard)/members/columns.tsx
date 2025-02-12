@@ -1,26 +1,17 @@
 "use client";
 
+import { ArrowUpDown } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowUpDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { Actions } from "./actions";
-import { VehicleType } from "@/features/members/types";
+import { VehicleData } from "@/features/members/types";
+import { snakeCaseToTitleCase } from "@/lib/utils";
 
-export type vehicleData = {
-  id: string;
-  model: string;
-  name: string;
-  number: string;
-  address: string;
-  vehicle_type: VehicleType.DEFAULT;
-  vehicle_number: string;
-  capacity: number;
-};
-
-export const columns: ColumnDef<vehicleData>[] = [
+export const columns: ColumnDef<VehicleData>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -57,7 +48,7 @@ export const columns: ColumnDef<vehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const model = row.original.model
+      const model = row.original.model;
       return <span className="line-clamp-1 ml-2">{model}</span>;
     },
   },
@@ -75,7 +66,7 @@ export const columns: ColumnDef<vehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const name = row.original.name
+      const name = row.original.name;
       return <span className="line-clamp-1 ml-2">{name}</span>;
     },
   },
@@ -93,7 +84,7 @@ export const columns: ColumnDef<vehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const number = row.original.number
+      const number = row.original.number;
       return <span className="line-clamp-1 ml-2">{number}</span>;
     },
   },
@@ -111,7 +102,7 @@ export const columns: ColumnDef<vehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const address = row.original.address
+      const address = row.original.address;
       return <span className="line-clamp-1 ml-2">{address}</span>;
     },
   },
@@ -129,7 +120,7 @@ export const columns: ColumnDef<vehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const type = row.original.vehicle_type
+      const type = row.original.vehicle_type;
       return <span className="line-clamp-1 ml-10">{type}</span>;
     },
   },
@@ -147,7 +138,7 @@ export const columns: ColumnDef<vehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const vehicle_num = row.original.vehicle_number
+      const vehicle_num = row.original.vehicle_number;
       return <span className="line-clamp-1 ml-5">{vehicle_num}</span>;
     },
   },
@@ -165,8 +156,29 @@ export const columns: ColumnDef<vehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const capacity = row.original.capacity
+      const capacity = row.original.capacity;
       return <span className="line-clamp-1 ml-5">{capacity}</span>;
+    },
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const status = row.original.status;
+
+      return status ? (
+        <Badge variant={status}>{snakeCaseToTitleCase(status)}</Badge>
+      ) : null;
     },
   },
   {

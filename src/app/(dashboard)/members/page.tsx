@@ -57,6 +57,7 @@ const MembersPage = () => {
             filterKey="address"
             // TODO: Notification Alert
             disabled={isLoading}
+            path="members"
           />
         </CardContent>
       </Card>
