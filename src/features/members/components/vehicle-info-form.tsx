@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { VehicleType } from "../types";
+import { VehicleType, VehicleStatus } from "../types";
 
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -156,6 +156,28 @@ export const VehicleInfoForm = ({
                 <SelectContent>
                   <SelectItem value={VehicleType.OPEN}>Open</SelectItem>
                   <SelectItem value={VehicleType.CLOSE}>Close</SelectItem>
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Vehicle Status</FormLabel>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an vehicle status" />
+                  </SelectTrigger>
+                </FormControl>
+                <FormMessage />
+                <SelectContent>
+                  <SelectItem value={VehicleStatus.IN_COMPLETE}>Incomplete</SelectItem>
+                  <SelectItem value={VehicleStatus.IN_PROGRESS}>Progress</SelectItem>
+                  <SelectItem value={VehicleStatus.COMPLETED}>Completed</SelectItem>
                 </SelectContent>
               </Select>
             </FormItem>

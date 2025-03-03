@@ -21,6 +21,7 @@ export type Testimonial = {
 };
 
 export enum VehicleStatus {
+    DEFAULT = "",
     IN_PROGRESS = "IN_PROGRESS",
     IN_COMPLETE = "IN_COMPLETE",
     COMPLETED = "COMPLETED",
