@@ -82,6 +82,16 @@ export const VehicleInfoForm = ({
     await onSubmit(values);
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cleanedInput = e.target.value.replace(/-/g, "").toUpperCase();
+    const formattedValue = cleanedInput
+      .slice(0, 10)
+      .replace(/(.{0,2})(.{0,2})(.{0,2})(.{0,4})/, (_, p1, p2, p3, p4) =>
+        [p1, p2, p3, p4].filter(Boolean).join("-")
+      );
+    form.setValue("vehicle_number", formattedValue, { shouldValidate: true });
+  };
+
   return (
     <Form {...form}>
       <form
@@ -186,12 +196,20 @@ export const VehicleInfoForm = ({
         <FormField
           control={form.control}
           name="vehicle_number"
+          rules={{
+            pattern: {
+              value: /^[A-Z]{2}-[0-9]{2}-[A-Z]{2}-[0-9]{4}$/,
+              message: "Invalid vehicle number",
+            }
+          }}
           render={({ field }) => (
             <FormItem>
-              <FormLabel> Vehicle Number</FormLabel>
+              <FormLabel>Vehicle Number</FormLabel>
               <FormControl>
                 <Input
                   {...field}
+                  value={field.value || ""}
+                  onChange={handleChange}
                   placeholder="Enter vehicle number (e.g., GJ-05-ES-9658)"
                 />
               </FormControl>
