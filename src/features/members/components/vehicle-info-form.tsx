@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { VehicleType, VehicleStatus } from "../types";
+import { VehicleType, VehicleStatus, LoactionStatus } from "../types";
 
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -72,7 +72,8 @@ export const VehicleInfoForm = ({
     if (error) {
       if ("data" in error) {
         const errorData = error as any;
-        const errorMessage = errorData?.data?.errors?.error;
+        const errorMessage =
+          errorData?.data?.errors?.error || "Something went wrong";
         toast.error(errorMessage);
       }
     }
@@ -129,9 +130,22 @@ export const VehicleInfoForm = ({
           name="number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Owner Phone Number</FormLabel>
+              <FormLabel>Owner Number</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Enter phone number" />
+                <Input {...field} placeholder="Enter owner phone number" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="alternate_number"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Driver Number</FormLabel>
+              <FormControl>
+                <Input {...field} placeholder="Enter driver phone number" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -185,9 +199,41 @@ export const VehicleInfoForm = ({
                 </FormControl>
                 <FormMessage />
                 <SelectContent>
-                  <SelectItem value={VehicleStatus.IN_COMPLETE}>Incomplete</SelectItem>
-                  <SelectItem value={VehicleStatus.IN_PROGRESS}>Progress</SelectItem>
-                  <SelectItem value={VehicleStatus.COMPLETED}>Completed</SelectItem>
+                  <SelectItem value={VehicleStatus.IN_COMPLETE}>
+                    Incomplete
+                  </SelectItem>
+                  <SelectItem value={VehicleStatus.IN_PROGRESS}>
+                    Progress
+                  </SelectItem>
+                  <SelectItem value={VehicleStatus.COMPLETED}>
+                    Completed
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="location_status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Location Status</FormLabel>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select an location status" />
+                  </SelectTrigger>
+                </FormControl>
+                <FormMessage />
+                <SelectContent>
+                  <SelectItem value={LoactionStatus.ON_LOCATION}>On</SelectItem>
+                  <SelectItem value={LoactionStatus.OFF_LOCATION}>
+                    Off
+                  </SelectItem>
+                  <SelectItem value={LoactionStatus.IN_TRANSIT}>
+                    In Transit
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </FormItem>
@@ -200,7 +246,7 @@ export const VehicleInfoForm = ({
             pattern: {
               value: /^[A-Z]{2}-[0-9]{2}-[A-Z]{2}-[0-9]{4}$/,
               message: "Invalid vehicle number",
-            }
+            },
           }}
           render={({ field }) => (
             <FormItem>

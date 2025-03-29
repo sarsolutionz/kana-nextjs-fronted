@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Circle, CircleOff } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Actions } from "./actions";
 import { VehicleData } from "@/features/members/types";
 import { snakeCaseToTitleCase } from "@/lib/utils";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const columns: ColumnDef<VehicleData>[] = [
   {
@@ -85,7 +92,12 @@ export const columns: ColumnDef<VehicleData>[] = [
     },
     cell: ({ row }) => {
       const number = row.original.number;
-      return <span className="line-clamp-1 ml-2">{number}</span>;
+      const alternate_number = row.original.alternate_number;
+      return (
+        <span className="line-clamp-1 ml-2 truncate">
+          {`${number} / ${alternate_number}`}
+        </span>
+      );
     },
   },
   {
@@ -102,8 +114,33 @@ export const columns: ColumnDef<VehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const address = row.original.address;
-      return <span className="line-clamp-1 ml-2">{address}</span>;
+      const {address, location_status} = row.original;
+
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="flex items-center gap-1 max-w-[200px]">
+                <span className="truncate">{address}</span>
+                {location_status === "ON_LOCATION" ? (
+                  <div className="flex items-center text-green-500">
+                    <Circle className="h-3 w-3 fill-current animate-pulse" />
+                    <span className="ml-1 text-xs">Live</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center text-gray-500">
+                    <CircleOff className="h-3 w-3" />
+                    <span className="ml-1 text-xs">Offline</span>
+                  </div>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent className="max-w-[300px] break-word">
+              {address}
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
     },
   },
   {

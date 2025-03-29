@@ -15,6 +15,7 @@ export const authApi = apiSlice.injectEndpoints({
                     "Content-type": "application/json"
                 }
             }),
+            invalidatesTags: ["user"],
         }),
         signIn: builder.mutation({
             query: (data) => ({
@@ -26,6 +27,7 @@ export const authApi = apiSlice.injectEndpoints({
                     "Content-type": "application/json"
                 }
             }),
+            invalidatesTags: ["user"],
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     const result = await queryFulfilled;
@@ -51,6 +53,7 @@ export const authApi = apiSlice.injectEndpoints({
                     'Authorization': `Bearer ${access_token}`,
                 }
             }),
+            invalidatesTags: ["user"],
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     await queryFulfilled;  // Wait for the query to complete
@@ -72,6 +75,7 @@ export const authApi = apiSlice.injectEndpoints({
                     'Authorization': `Bearer ${access_token}`,
                 }
             }),
+            invalidatesTags: ["user"],
             async onQueryStarted(arg, { queryFulfilled, dispatch }) {
                 try {
                     const result = await queryFulfilled;
