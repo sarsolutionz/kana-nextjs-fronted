@@ -27,7 +27,7 @@ export enum VehicleStatus {
     COMPLETED = "COMPLETED",
 }
 
-export enum LoactionStatus {
+export enum LocationStatus {
     DEFAULT = "",
     ON_LOCATION = "ON_LOCATION",
     OFF_LOCATION = "OFF_LOCATION",
@@ -36,15 +36,15 @@ export enum LoactionStatus {
 
 
 export type VehicleData = {
-    id: string;
-    model: string;
-    name: string;
-    number: string;
-    alternate_number: string;
-    address: string;
-    vehicle_type: VehicleType.DEFAULT;
-    location_status: LoactionStatus.DEFAULT;
-    vehicle_number: string;
-    capacity: number;
-    status: VehicleStatus;
+  id: string;
+  model: string;
+  name: string;
+  number: string;
+  alternate_number: string;
+  address: string;
+  vehicle_type: VehicleType.DEFAULT;
+  location_status: LocationStatus.DEFAULT;
+  vehicle_number: string;
+  capacity: number;
+  status: VehicleStatus;
 };

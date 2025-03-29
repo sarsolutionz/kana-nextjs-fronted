@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Actions } from "./actions";
 import { VehicleData } from "@/features/members/types";
 import { snakeCaseToTitleCase } from "@/lib/utils";
+import { LocationStatus } from "@/features/members/types"; // Adjust the path if necessary
 
 import {
   Tooltip,
@@ -114,7 +115,7 @@ export const columns: ColumnDef<VehicleData>[] = [
       );
     },
     cell: ({ row }) => {
-      const {address, location_status} = row.original;
+      const { address, location_status }: { address: string; location_status: LocationStatus } = row.original;
 
       return (
         <TooltipProvider>
@@ -122,7 +123,7 @@ export const columns: ColumnDef<VehicleData>[] = [
             <TooltipTrigger>
               <div className="flex items-center gap-1 max-w-[200px]">
                 <span className="truncate">{address}</span>
-                {location_status === "ON_LOCATION" ? (
+                {location_status === LocationStatus.ON_LOCATION as LocationStatus ? (
                   <div className="flex items-center text-green-500">
                     <Circle className="h-3 w-3 fill-current animate-pulse" />
                     <span className="ml-1 text-xs">Live</span>
