@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { VehicleType, VehicleStatus, LoactionStatus } from "../types";
+import { VehicleType, VehicleStatus, LocationStatus } from "../types";
 
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
@@ -227,11 +227,11 @@ export const VehicleInfoForm = ({
                 </FormControl>
                 <FormMessage />
                 <SelectContent>
-                  <SelectItem value={LoactionStatus.ON_LOCATION}>On</SelectItem>
-                  <SelectItem value={LoactionStatus.OFF_LOCATION}>
+                  <SelectItem value={LocationStatus.ON_LOCATION}>On</SelectItem>
+                  <SelectItem value={LocationStatus.OFF_LOCATION}>
                     Off
                   </SelectItem>
-                  <SelectItem value={LoactionStatus.IN_TRANSIT}>
+                  <SelectItem value={LocationStatus.IN_TRANSIT}>
                     In Transit
                   </SelectItem>
                 </SelectContent>

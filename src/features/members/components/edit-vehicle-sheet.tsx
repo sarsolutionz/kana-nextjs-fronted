@@ -21,7 +21,7 @@ import {
   useGetByIdVehicleInfoQuery,
 } from "@/redux/features/vehicle/vehicleApi";
 
-import { VehicleType, VehicleStatus, LoactionStatus } from "../types";
+import { VehicleType, VehicleStatus, LocationStatus } from "../types";
 
 type FormValues = z.input<typeof VehicleInfoSchema>;
 
@@ -67,7 +67,7 @@ export const EditVehicleSheet = () => {
         address: memberData.address || "",
         vehicle_type: memberData.vehicle_type || VehicleType.DEFAULT,
         status: memberData.status || VehicleStatus.DEFAULT,
-        location_status: memberData.location_status || LoactionStatus.DEFAULT,
+        location_status: memberData.location_status || LocationStatus.DEFAULT,
         vehicle_number: memberData.vehicle_number || "",
         capacity: memberData.capacity || undefined,
       }
@@ -79,7 +79,7 @@ export const EditVehicleSheet = () => {
         address: "",
         vehicle_type: VehicleType.DEFAULT,
         status: VehicleStatus.DEFAULT,
-        location_status: LoactionStatus.DEFAULT,
+        location_status: LocationStatus.DEFAULT,
         vehicle_number: "",
         capacity: undefined,
       };

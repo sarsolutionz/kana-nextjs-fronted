@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { VehicleType, VehicleStatus, LoactionStatus } from "./types";
+import { VehicleType, VehicleStatus, LocationStatus } from "./types";
 
 export const VehicleInfoSchema = z.object({
     model: z.string().min(1, "Required"),
@@ -9,7 +9,7 @@ export const VehicleInfoSchema = z.object({
     address: z.string().min(1, "Required"),
     vehicle_type: z.nativeEnum(VehicleType, { required_error: "Required" }),
     status: z.nativeEnum(VehicleStatus, { required_error: "Required" }),
-    location_status: z.nativeEnum(LoactionStatus, { required_error: "Required" }),
+    location_status: z.nativeEnum(LocationStatus, { required_error: "Required" }),
     vehicle_number: z.string().regex(
         /^[A-Z]{2}-\d{2}-[A-Z]{2}-\d{4}$/,
         "Vehicle number must follow the format (e.g., GJ-05-ES-9658)"
@@ -26,7 +26,7 @@ export const apiSchema = z.object({
     address: z.string(),
     vehicle_type: z.nativeEnum(VehicleType),
     status: z.nativeEnum(VehicleStatus),
-    location_status: z.nativeEnum(LoactionStatus),
+    location_status: z.nativeEnum(LocationStatus),
     vehicle_number: z.string(),
     capacity: z.number(),
 });
