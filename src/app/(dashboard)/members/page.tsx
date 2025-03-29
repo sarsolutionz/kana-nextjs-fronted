@@ -22,11 +22,11 @@ const MembersPage = () => {
     { refetchOnMountOrArgChange: true }
   );
 
-  useEffect(() => {
-    if (data) {
-      refetch();
-    }
-  }, [data, refetch]);
+  // useEffect(() => {
+  //   if (data) {
+  //     refetch();
+  //   }
+  // }, [data, refetch]);
 
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10">
