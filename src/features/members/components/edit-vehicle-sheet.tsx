@@ -21,7 +21,7 @@ import {
   useGetByIdVehicleInfoQuery,
 } from "@/redux/features/vehicle/vehicleApi";
 
-import { VehicleType, VehicleStatus } from "../types";
+import { VehicleType, VehicleStatus, LoactionStatus } from "../types";
 
 type FormValues = z.input<typeof VehicleInfoSchema>;
 
@@ -35,7 +35,7 @@ export const EditVehicleSheet = () => {
     isSuccess: memberSuccess,
     error: memberError,
   } = useGetByIdVehicleInfoQuery(id ?? skipToken, {
-    refetchOnMountOrArgChange: true,
+    refetchOnMountOrArgChange: false,
   });
 
   const [
@@ -63,9 +63,11 @@ export const EditVehicleSheet = () => {
         model: memberData.model || "",
         name: memberData.name || "",
         number: memberData.number || "",
+        alternate_number: memberData.alternate_number || "",
         address: memberData.address || "",
         vehicle_type: memberData.vehicle_type || VehicleType.DEFAULT,
         status: memberData.status || VehicleStatus.DEFAULT,
+        location_status: memberData.location_status || LoactionStatus.DEFAULT,
         vehicle_number: memberData.vehicle_number || "",
         capacity: memberData.capacity || undefined,
       }
@@ -73,9 +75,11 @@ export const EditVehicleSheet = () => {
         model: "",
         name: "",
         number: "",
+        alternate_number: "",
         address: "",
         vehicle_type: VehicleType.DEFAULT,
         status: VehicleStatus.DEFAULT,
+        location_status: LoactionStatus.DEFAULT,
         vehicle_number: "",
         capacity: undefined,
       };

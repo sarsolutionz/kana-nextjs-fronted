@@ -19,7 +19,7 @@ const MembersPage = () => {
   const { open: isOpen } = useCreateVehicleModal();
   const { data, isLoading, refetch } = useGetAllVehicleInfoQuery(
     {},
-    { refetchOnMountOrArgChange: true }
+    { refetchOnMountOrArgChange: false }
   );
 
   useEffect(() => {

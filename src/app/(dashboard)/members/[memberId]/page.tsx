@@ -38,7 +38,7 @@ const MemberIdPage = () => {
 
   const { data, refetch, isLoading, isSuccess, error } =
     useGetByIdVehicleDocQuery(memberId ?? skipToken, {
-      refetchOnMountOrArgChange: true,
+      refetchOnMountOrArgChange: false,
     });
 
   useEffect(() => {
