@@ -35,6 +35,7 @@ export const CreateTeamForm = ({ onCancel }: CreateTeamFormProps) => {
       name: "",
       password: "",
       password2: "",
+      number: "",
     },
   });
 
@@ -90,6 +91,22 @@ export const CreateTeamForm = ({ onCancel }: CreateTeamFormProps) => {
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input {...field} placeholder="Enter your name" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Enter Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter phone number"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

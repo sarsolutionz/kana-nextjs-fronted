@@ -34,16 +34,24 @@ export enum LoactionStatus {
     IN_TRANSIT = "IN_TRANSIT",
 }
 
+export enum VehicleName {
+    BOLERO = "Bolero",
+    BADA_DOST = "Bada Dost",
+    INTRA = "Intra",
+    FOURTEEN_FT = "14 FT",
+    SEVENTEEN_FT = "17 FT",
+    TWENTY_FT = "20 FT",
+}
 
 export type VehicleData = {
     id: string;
-    model: string;
+    model: VehicleName;
     name: string;
     number: string;
     alternate_number: string;
     address: string;
     vehicle_type: VehicleType.DEFAULT;
-    location_status: LoactionStatus.DEFAULT;
+    location_status: LoactionStatus;
     vehicle_number: string;
     capacity: number;
     status: VehicleStatus;

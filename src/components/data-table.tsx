@@ -76,89 +76,92 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
+    <>
       <div className="w-full">
-        {path === "members" ? (
-          <div className="hidden md:flex items-center py-4 gap-2">
-            <Input
-              placeholder={`Filter by ${filterKey}...`}
-              value={
-                (table.getColumn(filterKey)?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn(filterKey)?.setFilterValue(event.target.value)
-              }
-              className="max-w-sm"
-            />
-            <Input
-              placeholder={`Filter by ${"model"}...`}
-              value={
-                (table.getColumn("model")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("model")?.setFilterValue(event.target.value)
-              }
-              className="max-w-sm"
-            />
-            <Input
-              placeholder={`Filter by ${"capacity"}...`}
-              value={
-                (table.getColumn("capacity")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("capacity")?.setFilterValue(event.target.value)
-              }
-              className="max-w-sm"
-            />
-            <Input
-              placeholder={`Filter by ${"vehicle no"}...`}
-              value={
-                (table
-                  .getColumn("vehicle_number")
-                  ?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table
-                  .getColumn("vehicle_number")
-                  ?.setFilterValue(event.target.value)
-              }
-              className="max-w-sm"
-            />
-            <Select
-              onValueChange={(value) => {
-                if (value === "all") {
-                  table.getColumn("vehicle_type")?.setFilterValue("");
-                } else {
-                  table.getColumn("vehicle_type")?.setFilterValue(value);
+        <div className="flex flex-wrap items-center py-4 gap-2">
+          {path === "members" ? (
+            <div className="hidden md:flex items-center py-4 gap-2">
+              <Input
+                placeholder={`Filter by ${filterKey}...`}
+                value={
+                  (table.getColumn(filterKey)?.getFilterValue() as string) ?? ""
                 }
-              }}
-            >
-              <SelectTrigger className="w-[200px]">
-                <SelectValue placeholder="Vehicle Type" />
-              </SelectTrigger>
-              <SelectContent align="end">
-                <SelectItem value="all" className="text-center">
-                  All
-                </SelectItem>
-                <SelectItem value="open" className="text-center">
-                  Open
-                </SelectItem>
-                <SelectItem value="close" className="text-center">
-                  Close
-                </SelectItem>
-              </SelectContent>
-            </Select>
+                onChange={(event) =>
+                  table.getColumn(filterKey)?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+              <Input
+                placeholder={`Filter by ${"model"}...`}
+                value={
+                  (table.getColumn("model")?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                  table.getColumn("model")?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+              <Input
+                placeholder={`Filter by ${"capacity"}...`}
+                value={
+                  (table.getColumn("capacity")?.getFilterValue() as string) ??
+                  ""
+                }
+                onChange={(event) =>
+                  table
+                    .getColumn("capacity")
+                    ?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+              <Input
+                placeholder={`Filter by ${"vehicle no"}...`}
+                value={
+                  (table
+                    .getColumn("vehicle_number")
+                    ?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                  table
+                    .getColumn("vehicle_number")
+                    ?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+              <Select
+                onValueChange={(value) => {
+                  if (value === "all") {
+                    table.getColumn("vehicle_type")?.setFilterValue("");
+                  } else {
+                    table.getColumn("vehicle_type")?.setFilterValue(value);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Vehicle Type" />
+                </SelectTrigger>
+                <SelectContent align="end">
+                  <SelectItem value="all" className="text-center">
+                    All
+                  </SelectItem>
+                  <SelectItem value="open" className="text-center">
+                    Open
+                  </SelectItem>
+                  <SelectItem value="close" className="text-center">
+                    Close
+                  </SelectItem>
+                </SelectContent>
+              </Select>
 
-            {table ? (
-              <Modals table={table} />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Loader className="size-4 text-muted-foreground animate-spin" />
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="flex items-center py-4 gap-2">
+              {table ? (
+                <Modals table={table} />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Loader className="size-4 text-muted-foreground animate-spin" />
+                </div>
+              )}
+            </div>
+          ) : (
             <Input
               placeholder={`Filter by ${filterKey}...`}
               value={
@@ -167,22 +170,24 @@ export function DataTable<TData, TValue>({
               onChange={(event) =>
                 table.getColumn(filterKey)?.setFilterValue(event.target.value)
               }
-              className="max-w-sm"
+              className="max-w-xs"
             />
-          </div>
-        )}
+          )}
 
-        {table.getFilteredSelectedRowModel().rows.length > 0 && (
-          <Button
-            disabled={disabled}
-            size="sm"
-            variant="outline"
-            className="ml-auto font-normal text-xs"
-          >
-            <BellPlus className="size-4 mr-0.5" />
-            Send Alert ({table.getFilteredSelectedRowModel().rows.length})
-          </Button>
-        )}
+          {table.getFilteredSelectedRowModel().rows.length > 0 && (
+            <div className="ml-auto">
+              <Button
+                disabled={disabled}
+                size="sm"
+                variant="outline"
+                className="font-normal text-xs"
+              >
+                <BellPlus className="size-4 mr-0.5" />
+                Send Alert ({table.getFilteredSelectedRowModel().rows.length})
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -256,6 +261,6 @@ export function DataTable<TData, TValue>({
           Next
         </Button>
       </div>
-    </div>
+    </>
   );
 }

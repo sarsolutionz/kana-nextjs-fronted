@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { useEffect } from "react";
 import { Loader } from "lucide-react";
 
 import { skipToken } from "@reduxjs/toolkit/query";
@@ -21,7 +20,7 @@ import {
   useGetByIdVehicleInfoQuery,
 } from "@/redux/features/vehicle/vehicleApi";
 
-import { VehicleType, VehicleStatus, LoactionStatus } from "../types";
+import { VehicleType, VehicleStatus, LoactionStatus, VehicleName } from "../types";
 
 type FormValues = z.input<typeof VehicleInfoSchema>;
 
@@ -30,24 +29,17 @@ export const EditVehicleSheet = () => {
 
   const {
     data: memberData,
-    refetch: memberRefetch,
     isLoading: memberLoading,
     isSuccess: memberSuccess,
     error: memberError,
   } = useGetByIdVehicleInfoQuery(id ?? skipToken, {
-    refetchOnMountOrArgChange: false,
+    refetchOnMountOrArgChange: true,
   });
 
   const [
     editVehicleInfo,
     { isSuccess: editSuccess, error: editError, isLoading: editIsLoading },
   ] = useEditVehicleInfoMutation();
-
-  useEffect(() => {
-    if (id && memberSuccess && editSuccess) {
-      memberRefetch();
-    }
-  }, [id, memberSuccess, memberRefetch, editSuccess]);
 
   const error = memberError || editError;
   const isSuccess = memberSuccess || editSuccess;
@@ -60,7 +52,7 @@ export const EditVehicleSheet = () => {
 
   const defaultValues = memberData
     ? {
-        model: memberData.model || "",
+        model: memberData.model || VehicleName.BOLERO,
         name: memberData.name || "",
         number: memberData.number || "",
         alternate_number: memberData.alternate_number || "",
@@ -72,7 +64,7 @@ export const EditVehicleSheet = () => {
         capacity: memberData.capacity || undefined,
       }
     : {
-        model: "",
+        model: VehicleName.BOLERO,
         name: "",
         number: "",
         alternate_number: "",

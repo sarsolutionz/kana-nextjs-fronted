@@ -36,18 +36,18 @@ const MemberIdPage = () => {
   const handleOpen = () => setIsDialogOpen(true);
   const handleClose = () => setIsDialogOpen(false);
 
-  const { data, refetch, isLoading, isSuccess, error } =
-    useGetByIdVehicleDocQuery(memberId ?? skipToken, {
-      refetchOnMountOrArgChange: false,
-    });
+  const { data, refetch, isLoading, error } = useGetByIdVehicleDocQuery(
+    memberId ?? skipToken,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   useEffect(() => {
-    if (memberId && isSuccess) {
-      refetch();
-    } else if (memberId && error) {
+    if (memberId && error) {
       console.error("Error fetching data", error);
     }
-  }, [memberId, isSuccess, refetch, error]);
+  }, [memberId, error]);
 
   if (isLoading && !memberId) {
     return (

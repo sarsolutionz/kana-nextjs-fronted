@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { useEffect } from "react";
 import { Filter, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -15,18 +13,12 @@ import { columns } from "./columns";
 import { DataTable } from "@/components/data-table";
 
 const MembersPage = () => {
-  const [_open, setOpen] = useFilterInfoModal();
+  const [, setOpen] = useFilterInfoModal();
   const { open: isOpen } = useCreateVehicleModal();
-  const { data, isLoading, refetch } = useGetAllVehicleInfoQuery(
-    {},
-    { refetchOnMountOrArgChange: false }
+  const { data = [], isLoading } = useGetAllVehicleInfoQuery(
+    undefined,
+    { refetchOnMountOrArgChange: true }
   );
-
-  useEffect(() => {
-    if (data) {
-      refetch();
-    }
-  }, [data, refetch]);
 
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10">
@@ -53,7 +45,7 @@ const MembersPage = () => {
         <CardContent>
           <DataTable
             columns={columns}
-            data={data || []}
+            data={data}
             filterKey="address"
             // TODO: Notification Alert
             disabled={isLoading}

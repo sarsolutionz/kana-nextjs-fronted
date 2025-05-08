@@ -7,6 +7,7 @@ export enum ActiveProfile {
 export type TeamData = {
     id: string;
     name: string;
+    number: string;
     is_active?: boolean;
     is_admin?: boolean;
     role: ActiveProfile.DEFAULT;

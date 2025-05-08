@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { VehicleType, VehicleStatus, LoactionStatus } from "./types";
+import { VehicleType, VehicleStatus, LoactionStatus, VehicleName } from "./types";
 
 export const VehicleInfoSchema = z.object({
-    model: z.string().min(1, "Required"),
+    model: z.nativeEnum(VehicleName, { required_error: "Required" }),
     name: z.string().min(1, "Required"),
     number: z.string().regex(/^\d{10}$/, "Number must be a valid 10-digit phone number"),
     alternate_number: z.string().regex(/^\d{10}$/, "Number must be a valid 10-digit phone number"),
@@ -19,7 +19,7 @@ export const VehicleInfoSchema = z.object({
 
 export const apiSchema = z.object({
     id: z.string().optional(),
-    model: z.string(),
+    model: z.nativeEnum(VehicleName),
     name: z.string(),
     number: z.string(),
     alternate_number: z.string(),

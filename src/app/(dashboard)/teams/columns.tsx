@@ -74,6 +74,24 @@ export const columns: ColumnDef<TeamData>[] = [
     },
   },
   {
+    accessorKey: "number",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Number
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const number = row.original.number;
+      return <span className="line-clamp-1 ml-4">{number}</span>;
+    },
+  },
+  {
     accessorKey: "is_active",
     header: ({ column }) => {
       return (
