@@ -36,8 +36,9 @@ import {
 } from "./ui/select";
 import { FiltersInfo } from "@/features/members/components/filters-info";
 import { Modals } from "./modals";
+import { useCreateNotificationModal } from "@/features/members/hooks/use-create-notification-modal";
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData extends { id: string }, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   filterKey: string;
@@ -45,7 +46,7 @@ interface DataTableProps<TData, TValue> {
   path: string;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string }, TValue>({
   columns,
   data,
   filterKey,
@@ -57,6 +58,8 @@ export function DataTable<TData, TValue>({
     []
   );
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const { open } = useCreateNotificationModal();
 
   const table = useReactTable({
     data,
@@ -181,6 +184,16 @@ export function DataTable<TData, TValue>({
                 size="sm"
                 variant="outline"
                 className="font-normal text-xs"
+                onClick={() => {
+                  const selectedRows = table
+                    .getSelectedRowModel()
+                    .flatRows.map((row) => row.original);
+                  const selectedIds = selectedRows.map((row) => Number(row.id));
+                  selectedIds.forEach((id) => {
+                    open(id);
+                  });
+                  table.resetRowSelection();
+                }}
               >
                 <BellPlus className="size-4 mr-0.5" />
                 Send Alert ({table.getFilteredSelectedRowModel().rows.length})

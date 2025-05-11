@@ -232,12 +232,6 @@ export const VehicleInfoForm = ({
         <FormField
           control={form.control}
           name="vehicle_number"
-          rules={{
-            pattern: {
-              value: /^[A-Z]{2}-[0-9]{2}-[A-Z]{2}-[0-9]{4}$/,
-              message: "Invalid vehicle number",
-            },
-          }}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Vehicle Number</FormLabel>

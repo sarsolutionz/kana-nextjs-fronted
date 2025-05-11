@@ -56,3 +56,15 @@ export type VehicleData = {
     capacity: number;
     status: VehicleStatus;
 };
+
+
+export type NotificationData = {
+    id: string;
+    source: string;
+    destination: string;
+    rate: number;
+    weight: number;
+    date: string;
+    message: string;
+    contact: string;
+}

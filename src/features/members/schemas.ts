@@ -30,3 +30,23 @@ export const apiSchema = z.object({
     vehicle_number: z.string(),
     capacity: z.number(),
 });
+
+export const createNotificationSchema = z.object({
+    source: z.string().min(1, "Required"),
+    destination: z.string().min(1, "Required"),
+    rate: z.number().min(1, "Required"),
+    weight: z.number().min(1, "Required"),
+    date: z.coerce.date(),
+    message: z.string().min(1, "Required"),
+    contact: z.string().regex(/^\d{10}$/, "Number must be a valid 10-digit phone number"),
+})
+
+export const createNotificationApiSchema = z.object({
+    source: z.string(),
+    destination: z.string(),
+    rate: z.number(),
+    weight: z.number(),
+    date: z.coerce.date(),
+    message: z.string(),
+    contact: z.string(),
+})

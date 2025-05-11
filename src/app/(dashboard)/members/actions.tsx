@@ -1,16 +1,18 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { BellPlus, Edit, FileUp, MoreHorizontal } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { BellPlus, Edit, FileUp, MoreHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import { useOpenMember } from "@/features/members/hooks/use-open-member";
-import { useRouter } from "next/navigation";
+import { useCreateNotificationModal } from "@/features/members/hooks/use-create-notification-modal";
 
 interface ActionsProps {
   id: string;
@@ -19,6 +21,7 @@ interface ActionsProps {
 export const Actions = ({ id }: ActionsProps) => {
   const router = useRouter();
   const { onOpen } = useOpenMember();
+  const { open } = useCreateNotificationModal();
 
   const handleDocumnet = () => {
     router.push(`/members/${id}`);
@@ -36,7 +39,7 @@ export const Actions = ({ id }: ActionsProps) => {
           <Edit className="size-4 mr-2" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem disabled={false} onClick={() => {}}>
+        <DropdownMenuItem disabled={false} onClick={() => open(Number(id))}>
           <BellPlus className="size-4 mr-2" />
           Send Alert
         </DropdownMenuItem>

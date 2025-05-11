@@ -63,7 +63,21 @@ export const vehicleApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["VehicleDocs"],
         }),
+        createNotification: builder.mutation({
+            query: (payload) => ({
+                url: `member/create-notifications/`,
+                method: "POST",
+                body: {
+                    vehicle_ids: payload.vehicle_ids,
+                    notifications: payload.notifications,
+                },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }),
+            invalidatesTags: ["VehicleDocs"],
+        }),
     })
 })
 
-export const { useCreateVehicleMutation, useGetAllVehicleInfoQuery, useGetByIdVehicleInfoQuery, useEditVehicleInfoMutation, useCreateVehicleDocMutation, useGetByIdVehicleDocQuery, useDeleteVehicleDocMutation } = vehicleApi;
+export const { useCreateVehicleMutation, useGetAllVehicleInfoQuery, useGetByIdVehicleInfoQuery, useEditVehicleInfoMutation, useCreateVehicleDocMutation, useGetByIdVehicleDocQuery, useDeleteVehicleDocMutation, useCreateNotificationMutation } = vehicleApi;
