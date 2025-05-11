@@ -185,13 +185,10 @@ export function DataTable<TData extends { id: string }, TValue>({
                 variant="outline"
                 className="font-normal text-xs"
                 onClick={() => {
-                  const selectedRows = table
+                  const selectedIds = table
                     .getSelectedRowModel()
-                    .flatRows.map((row) => row.original);
-                  const selectedIds = selectedRows.map((row) => Number(row.id));
-                  selectedIds.forEach((id) => {
-                    open(id);
-                  });
+                    .flatRows.map((row) => row.original.id);
+                  open(selectedIds);
                   table.resetRowSelection();
                 }}
               >

@@ -39,7 +39,7 @@ export const Actions = ({ id }: ActionsProps) => {
           <Edit className="size-4 mr-2" />
           Edit
         </DropdownMenuItem>
-        <DropdownMenuItem disabled={false} onClick={() => open(Number(id))}>
+        <DropdownMenuItem disabled={false} onClick={() => open([id])}>
           <BellPlus className="size-4 mr-2" />
           Send Alert
         </DropdownMenuItem>

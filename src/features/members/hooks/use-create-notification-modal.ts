@@ -1,12 +1,12 @@
-import { parseAsInteger, useQueryState, } from "nuqs";
+import { parseAsString, useQueryState, } from "nuqs";
 
 export const useCreateNotificationModal = () => {
     const [notificationId, setNotificationId] = useQueryState(
         "create-notification",
-        parseAsInteger,
+        parseAsString,
     )
 
-    const open = (id: number) => setNotificationId(id);
+    const open = (ids: string[]) => setNotificationId(ids.join(","));
     const close = () => setNotificationId(null);
 
     return {

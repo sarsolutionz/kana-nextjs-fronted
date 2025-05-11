@@ -26,10 +26,8 @@ import { DatePicker } from "@/components/date-picker";
 import { createNotificationSchema } from "../schemas";
 
 import { useCreateNotificationMutation } from "@/redux/features/vehicle/vehicleApi";
-
-
 interface CreateNotificationFormProps {
-  id?: number;
+  id?: string;
   onCancel?: () => void;
 }
 
@@ -74,7 +72,7 @@ export const CreateNotificationForm = ({
     };
 
     const payload = {
-      vehicle_ids: [id],
+      vehicle_ids: id?.split(",").map(Number),
       notifications: [modifiedValues],
     };
     await createNotification(payload);
