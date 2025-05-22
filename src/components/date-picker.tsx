@@ -1,63 +1,48 @@
-"use client";
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalenderIcon } from "lucide-react";
+import { SelectSingleEventHandler } from "react-day-picker";
 
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 
-interface Props {
+type Props = {
   value?: Date;
-  onChange: (date: string) => void;
+  onChange?: SelectSingleEventHandler;
   disabled?: boolean;
-}
+};
 
-const DatePicker = React.forwardRef<HTMLButtonElement, Props>(
-  ({ value, onChange, disabled }, ref) => {
-    const handleDateSelect = (date: Date | undefined) => {
-      if (!date) return;
-
-      const formattedDate = format(date, "yyyy-MM-dd");
-      
-      onChange(formattedDate);
-    };
-
-    return (
-      <Popover modal>
-        <PopoverTrigger asChild>
-          <Button
-            ref={ref}
-            disabled={disabled}
-            variant="outline"
-            className={cn(
-              "w-full justify-start text-left font-normal",
-              !value && "text-muted-foreground"
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {value ? format(value, "yyyy-MM-dd") : <span>Pick a date</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0">
-          <Calendar
-            mode="single"
-            selected={value}
-            onSelect={handleDateSelect}
-            disabled={disabled}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
-    );
-  }
-);
-
-DatePicker.displayName = "DatePicker";
-
-export { DatePicker };
+export const DatePicker = ({ value, onChange, disabled }: Props) => {
+  return (
+    <Popover modal={true}>
+      <PopoverTrigger asChild>
+        <Button
+          disabled={disabled}
+          variant="outline"
+          className={cn(
+            "w-full justify-start text-left font-normal",
+            !value && "text-muted-foreground"
+          )}
+        >
+          <CalenderIcon className="size-4 mr-2" />
+          {value ? format(value, "yyyy-MM-dd") : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <Calendar
+          mode="single"
+          selected={value}
+          onSelect={onChange}
+          disabled={disabled}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  );
+};

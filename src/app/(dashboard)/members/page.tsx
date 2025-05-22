@@ -11,14 +11,16 @@ import { useCreateVehicleModal } from "@/features/members/hooks/use-create-vehic
 
 import { columns } from "./columns";
 import { DataTable } from "@/components/data-table";
+import { useVehicleWebSocket } from "@/hooks/use-vehicle-websocket";
 
 const MembersPage = () => {
   const [, setOpen] = useFilterInfoModal();
   const { open: isOpen } = useCreateVehicleModal();
-  const { data = [], isLoading } = useGetAllVehicleInfoQuery(
-    undefined,
-    { refetchOnMountOrArgChange: true }
-  );
+  const { isLoading } = useGetAllVehicleInfoQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  const { vehicleData } = useVehicleWebSocket();
 
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10">
@@ -45,7 +47,7 @@ const MembersPage = () => {
         <CardContent>
           <DataTable
             columns={columns}
-            data={data}
+            data={vehicleData}
             filterKey="address"
             // TODO: Notification Alert
             disabled={isLoading}

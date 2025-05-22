@@ -144,6 +144,32 @@ export const columns: ColumnDef<TeamData>[] = [
     },
   },
   {
+    accessorKey: "is_blocked",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Is Blocked
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const is_blocked = row.original.is_blocked;
+      return (
+        <span className="line-clamp-1 ml-6">
+          {is_blocked ? (
+            <CircleCheck className="size-5 bg-green-600 text-white rounded-full" />
+          ) : (
+            <CircleXIcon className="size-5 bg-red-600 text-white rounded-full" />
+          )}
+        </span>
+      );
+    },
+  },
+  {
     accessorKey: "role",
     header: ({ column }) => {
       return (
@@ -158,7 +184,9 @@ export const columns: ColumnDef<TeamData>[] = [
     },
     cell: ({ row }) => {
       const role = row.original.role;
-      return <span className="line-clamp-1 ml-5">{role ? role : <MinusIcon />}</span>;
+      return (
+        <span className="line-clamp-1 ml-5">{role ? role : <MinusIcon />}</span>
+      );
     },
   },
   {

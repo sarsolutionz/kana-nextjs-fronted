@@ -10,6 +10,7 @@ export type TeamData = {
     number: string;
     is_active?: boolean;
     is_admin?: boolean;
-    role: ActiveProfile.DEFAULT;
+    is_blocked?: boolean;
+    role: ActiveProfile;
     email: string;
 };

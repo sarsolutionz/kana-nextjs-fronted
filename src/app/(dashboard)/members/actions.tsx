@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { BellPlus, Edit, FileUp, MoreHorizontal } from "lucide-react";
+import { BellPlus, Edit, FileUp, MoreHorizontal, Trash2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -13,6 +14,9 @@ import { Button } from "@/components/ui/button";
 
 import { useOpenMember } from "@/features/members/hooks/use-open-member";
 import { useCreateNotificationModal } from "@/features/members/hooks/use-create-notification-modal";
+import { useConfirm } from "@/hooks/use-confirm";
+
+import { useDeleteVehicleByIdMutation } from "@/redux/features/vehicle/vehicleApi";
 
 interface ActionsProps {
   id: string;
@@ -27,27 +31,54 @@ export const Actions = ({ id }: ActionsProps) => {
     router.push(`/members/${id}`);
   };
 
+  const [ConfirmDialog, confirm] = useConfirm(
+    "Delete Vehicle",
+    "Are you sure you want to delete this vehicle?"
+  );
+
+  const [deleteVehicleById, { isLoading, isSuccess }] =
+    useDeleteVehicleByIdMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.refresh();
+    }
+  }, [isSuccess, router]);
+
+  const handleDelete = async () => {
+    const ok = await confirm();
+    if (!ok) return;
+    await deleteVehicleById(id);
+  };
+
   return (
-    <DropdownMenu modal={false}>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="size-8 p-0">
-          <MoreHorizontal className="size-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem disabled={false} onClick={() => onOpen(id)}>
-          <Edit className="size-4 mr-2" />
-          Edit
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled={false} onClick={() => open([id])}>
-          <BellPlus className="size-4 mr-2" />
-          Send Alert
-        </DropdownMenuItem>
-        <DropdownMenuItem disabled={false} onClick={handleDocumnet}>
-          <FileUp className="size-4 mr-2" />
-          Documents
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <ConfirmDialog />
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="size-8 p-0">
+            <MoreHorizontal className="size-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => onOpen(id)}>
+            <Edit className="size-4 mr-2" />
+            Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => open([id])}>
+            <BellPlus className="size-4 mr-2" />
+            Send Alert
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleDocumnet}>
+            <FileUp className="size-4 mr-2" />
+            Documents
+          </DropdownMenuItem>
+          <DropdownMenuItem disabled={isLoading} onClick={() => handleDelete()}>
+            <Trash2 className="size-4 mr-2" />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 };

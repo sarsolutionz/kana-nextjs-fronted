@@ -40,12 +40,27 @@ interface EditTeamFormProps {
 export const EditTeamForm = ({ onCancel, id }: EditTeamFormProps) => {
   const form = useForm<z.infer<typeof createTeamSchema>>({
     resolver: zodResolver(createTeamSchema),
-    defaultValues: {
-      name: "",
-      is_active: false,
-      is_admin: false,
-      role: ActiveProfile.DEFAULT,
-      email: "",
+    defaultValues: async () => {
+      if (userData) {
+        return {
+          name: userData.name || "",
+          number: userData.number || "",
+          is_active: userData.is_active ?? false,
+          is_admin: userData.is_admin ?? false,
+          is_blocked: userData.is_blocked ?? false,
+          role: userData.role || ActiveProfile.DEFAULT,
+          email: userData.email || "",
+        };
+      }
+      return {
+        name: "",
+        number: "",
+        is_active: false,
+        is_admin: false,
+        is_blocked: false,
+        role: ActiveProfile.DEFAULT,
+        email: "",
+      };
     },
   });
 
@@ -66,32 +81,18 @@ export const EditTeamForm = ({ onCancel, id }: EditTeamFormProps) => {
   const isLoading = userLoading || editIsLoading;
 
   useEffect(() => {
-    if (userData) {
-      form.setValue("name", userData.name || "");
-      form.setValue("number", userData.number || "");
-      form.setValue("is_active", userData.is_active || false);
-      form.setValue("is_admin", userData.is_admin || false);
-      form.setValue("role", userData.role || ActiveProfile.DEFAULT);
-      form.setValue("email", userData.email || "");
-    }
-  }, [userData, form]);
-
-  useEffect(() => {
     if (editIsSuccess) {
       toast.success("User updated");
       form.reset();
       onCancel?.();
     }
-  }, [editIsSuccess, id, form, onCancel]);
-
-  useEffect(() => {
     if (error && "data" in error) {
       toast.error("Something went wrong");
     }
-  }, [error]);
+  }, [editIsSuccess, id, form, onCancel, error]);
 
-  const onSubmit = (values: z.infer<typeof createTeamSchema>) => {
-    editUserById({ id, data: values });
+  const onSubmit = async (values: z.infer<typeof createTeamSchema>) => {
+    await editUserById({ id, data: values });
   };
 
   return (
@@ -119,6 +120,19 @@ export const EditTeamForm = ({ onCancel, id }: EditTeamFormProps) => {
                         disabled
                         className="opacity-100 bg-muted"
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="number"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Number</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Enter your number" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -182,11 +196,39 @@ export const EditTeamForm = ({ onCancel, id }: EditTeamFormProps) => {
               />
               <FormField
                 control={form.control}
+                name="is_blocked"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>User Blocked</FormLabel>
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormLabel className="space-y-1 leading-none">
+                        Is blocked
+                      </FormLabel>
+                    </FormItem>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="role"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Role</FormLabel>
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select
+                      value={field.value}
+                      onValueChange={(value) => {
+                        console.log("Role changed to:", value);
+                        field.onChange(value);
+                      }}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select an role type" />

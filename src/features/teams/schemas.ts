@@ -6,6 +6,7 @@ export const createTeamSchema = z.object({
     number: z.string().regex(/^\d{10}$/, "Number must be a valid 10-digit phone number"),
     is_active: z.boolean().default(false).optional(),
     is_admin: z.boolean().default(false).optional(),
+    is_blocked: z.boolean().default(false).optional(),
     role: z.nativeEnum(ActiveProfile, { required_error: "Required" }),
     email: z.string().email(),
 });

@@ -91,7 +91,15 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             }
         }),
+        deleteDriverById: builder.mutation({
+            query: (id) => ({
+                url: `mobile-auth/delete-user?driver_id=${id}`,
+                method: "POST",
+                credentials: "include" as const,
+            }),
+            invalidatesTags: ["user"],
+        }),
     }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useSignOutMutation, useGetMemberInfoMutation } = authApi;
+export const { useSignUpMutation, useSignInMutation, useSignOutMutation, useGetMemberInfoMutation, useDeleteDriverByIdMutation } = authApi;

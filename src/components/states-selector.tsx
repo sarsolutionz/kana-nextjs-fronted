@@ -85,7 +85,7 @@ const StateCitySelector = React.forwardRef<
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal>
+    <Popover open={open} onOpenChange={setOpen} modal={true}>
       <PopoverTrigger asChild>
         <Button
           ref={ref}
