@@ -1,3 +1,13 @@
+import { z } from "zod";
+import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { Loader } from "lucide-react";
+import { useEffect } from "react";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createTeamSchema } from "../schemas";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -7,12 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { createTeamSchema } from "../schemas";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -20,56 +25,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ActiveProfile } from "../types";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import {
-  useEditUserByIdMutation,
-  useGetUserByIdQuery,
-} from "@/redux/features/team/teamApi";
-import { useEffect } from "react";
-import { toast } from "sonner";
-import { skipToken } from "@reduxjs/toolkit/query";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
 
+import { ActiveProfile } from "../types";
+
+import { useEditUserByIdMutation } from "@/redux/features/team/teamApi";
+
+import { SerializedError } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+
+type FormValues = z.input<typeof createTeamSchema>;
 interface EditTeamFormProps {
   onCancel: () => void;
   id: string;
+  initialValues: FormValues;
+  error: FetchBaseQueryError | SerializedError | undefined;
+  isLoading: boolean;
 }
 
-export const EditTeamForm = ({ onCancel, id }: EditTeamFormProps) => {
+export const EditTeamForm = ({
+  onCancel,
+  id,
+  initialValues,
+  error: userError,
+  isLoading: userLoading,
+}: EditTeamFormProps) => {
   const form = useForm<z.infer<typeof createTeamSchema>>({
     resolver: zodResolver(createTeamSchema),
-    defaultValues: async () => {
-      if (userData) {
-        return {
-          name: userData.name || "",
-          number: userData.number || "",
-          is_active: userData.is_active ?? false,
-          is_admin: userData.is_admin ?? false,
-          is_blocked: userData.is_blocked ?? false,
-          role: userData.role || ActiveProfile.DEFAULT,
-          email: userData.email || "",
-        };
-      }
-      return {
-        name: "",
-        number: "",
-        is_active: false,
-        is_admin: false,
-        is_blocked: false,
-        role: ActiveProfile.DEFAULT,
-        email: "",
-      };
-    },
-  });
-
-  const {
-    data: userData,
-    isLoading: userLoading,
-    error: userError,
-  } = useGetUserByIdQuery(id ?? skipToken, {
-    refetchOnMountOrArgChange: true,
+    defaultValues: initialValues,
   });
 
   const [
@@ -86,14 +72,25 @@ export const EditTeamForm = ({ onCancel, id }: EditTeamFormProps) => {
       form.reset();
       onCancel?.();
     }
+    form.reset(initialValues);
     if (error && "data" in error) {
       toast.error("Something went wrong");
     }
-  }, [editIsSuccess, id, form, onCancel, error]);
+  }, [editIsSuccess, form, onCancel, error, initialValues]);
 
   const onSubmit = async (values: z.infer<typeof createTeamSchema>) => {
     await editUserById({ id, data: values });
   };
+
+  if (isLoading) {
+    return (
+      <Card className="w-full h-[714px] border-none shadow-none">
+        <CardContent className="flex items-center justify-center h-full">
+          <Loader className="size-5 animate-spin text-muted-foreground" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full h-full border-none shadow-none">
@@ -222,12 +219,8 @@ export const EditTeamForm = ({ onCancel, id }: EditTeamFormProps) => {
                   <FormItem>
                     <FormLabel>Role</FormLabel>
                     <Select
-                      value={field.value}
-                      onValueChange={(value) => {
-                        console.log("Role changed to:", value);
-                        field.onChange(value);
-                      }}
-                      defaultValue={field.value}
+                      value={field.value || ActiveProfile.DEFAULT}
+                      onValueChange={field.onChange}
                     >
                       <FormControl>
                         <SelectTrigger>

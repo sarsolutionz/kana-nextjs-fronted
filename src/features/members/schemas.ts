@@ -25,7 +25,7 @@ export const apiSchema = z.object({
     address: z.string(),
     vehicle_type: z.nativeEnum(VehicleType),
     status: z.nativeEnum(VehicleStatus),
-    location_status: z.nativeEnum(LoactionStatus),
+    location_status: z.nativeEnum(LoactionStatus).optional(),
     vehicle_number: z.string(),
     capacity: z.number(),
 });

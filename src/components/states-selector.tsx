@@ -99,7 +99,7 @@ const StateCitySelector = React.forwardRef<
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="p-0 w-[var(--radix-popover-trigger-width)]"
+        className="p-0 w-[var(--radix-popover-trigger-width)] pointer-events-auto"
         align="start"
       >
         <Command shouldFilter={false} ref={commandRef}>
