@@ -4,7 +4,7 @@ import { RootState } from "../auth/authSlice";
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://127.0.0.1:8000/api/",
+        baseUrl: "https://api.kanalogistics.co/api/",
         prepareHeaders(headers, { getState }) {
             const accessToken = (getState() as RootState)?.auth?.access_token?.access;
 

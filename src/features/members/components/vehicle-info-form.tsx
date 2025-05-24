@@ -196,6 +196,7 @@ export const VehicleInfoForm = ({
                 <SelectContent>
                   <SelectItem value={VehicleType.OPEN}>Open</SelectItem>
                   <SelectItem value={VehicleType.CLOSE}>Close</SelectItem>
+                  <SelectItem value={VehicleType.STANDARD}>Standard</SelectItem>
                 </SelectContent>
               </Select>
             </FormItem>

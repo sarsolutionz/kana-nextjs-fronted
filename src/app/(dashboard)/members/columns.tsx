@@ -49,14 +49,14 @@ export const columns: ColumnDef<VehicleData>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Model
+          Vehicle Type
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const model = row.original.model;
-      return <span className="line-clamp-1 ml-2">{model}</span>;
+      return <span className="line-clamp-1 ml-6">{model}</span>;
     },
   },
   {
@@ -151,14 +151,14 @@ export const columns: ColumnDef<VehicleData>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Vehicle Type
+          Body Type
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const type = row.original.vehicle_type;
-      return <span className="line-clamp-1 ml-10">{type}</span>;
+      return <span className="line-clamp-1 ml-6">{type}</span>;
     },
   },
   {

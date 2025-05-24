@@ -153,6 +153,9 @@ export function DataTable<TData extends { id: string }, TValue>({
                   <SelectItem value="close" className="text-center">
                     Close
                   </SelectItem>
+                  <SelectItem value="standard" className="text-center">
+                    Standard
+                  </SelectItem>
                 </SelectContent>
               </Select>
 
