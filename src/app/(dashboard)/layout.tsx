@@ -1,12 +1,13 @@
 'use client';
 import { useEffect } from "react";
 
-import { Navbar } from "@/components/navbar";
-import { Sidebar } from "@/components/sidebar";
+// import { Navbar } from "@/components/navbar";
+// import { Sidebar } from "@/components/sidebar";
 
 import { EditTeamModal } from "@/features/teams/components/edit-team-modal";
 import { CreateTeamModal } from "@/features/teams/components/create-team-modal";
 import { CreateNotificationModal } from "@/features/members/components/create-notification-modal";
+import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -43,7 +44,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <CreateTeamModal />
       <EditTeamModal />
       <CreateNotificationModal />
-      <div className="flex w-full h-full">
+      {/* <div className="flex w-full h-full">
         <div className="fixed left-0 top-0 hidden lg:block lg:w-[264px] h-full overflow-y-auto">
           <Sidebar />
         </div>
@@ -53,7 +54,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <main className="h-full py-8 px-6 flex flex-col">{children}</main>
           </div>
         </div>
-      </div>
+      </div> */}
+      <AdminPanelLayout>{children}</AdminPanelLayout>
     </div>
   );
 };

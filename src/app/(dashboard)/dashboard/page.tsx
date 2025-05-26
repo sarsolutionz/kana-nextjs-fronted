@@ -1,9 +1,5 @@
 "use client";
-
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
 
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 
@@ -13,7 +9,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -21,24 +17,16 @@ import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger,
+  TooltipTrigger
 } from "@/components/ui/tooltip";
 
-import { useStore } from "@/hooks/use-store";
 import { useSidebar } from "@/hooks/use-sidebar";
+import { useStore } from "@/hooks/use-store";
 
 export default function DashboardPage() {
-  const user = useSelector((state: RootState) => state.auth.user);
-  const access_token = useSelector(
-    (state: RootState) => state.auth.access_token?.access
-  );
-
-  if (!user || !access_token) redirect("/sign-in");
-
   const sidebar = useStore(useSidebar, (x) => x);
   if (!sidebar) return null;
   const { settings, setSettings } = sidebar;
-
   return (
     <ContentLayout title="Dashboard">
       <Breadcrumb>

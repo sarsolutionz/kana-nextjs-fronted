@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 
 import { Modals } from "@/components/modals";
@@ -9,16 +8,9 @@ import { Providers } from "./Provider";
 import { Toaster } from "@/components/ui/sonner";
 import { SheetProvider } from "@/providers/sheet-provider";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import { ThemeProvider } from "@/components/providers/theme-provider";
+
+import { GeistSans } from "geist/font/sans";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,19 +23,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        suppressHydrationWarning={true}
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <JotaiProvider>
-          <Providers>
-            <SheetProvider />
-            <Toaster />
-            <Modals />
-            {children}
-          </Providers>
-        </JotaiProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${GeistSans.className}`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <JotaiProvider>
+            <Providers>
+              <SheetProvider />
+              <Toaster />
+              <Modals />
+              {children}
+            </Providers>
+          </JotaiProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { Loader } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Loader, MoveLeftIcon } from "lucide-react";
 
 import {
   Dialog,
@@ -18,9 +18,21 @@ import { ImageUpload } from "@/features/members/components/image-upload";
 import { TestimonialSliderCard } from "../../../../components/testimonials-slider-card";
 
 import { useMemberId } from "@/features/members/hooks/use-member-id";
-import { useGetByIdVehicleDocQuery } from "@/redux/features/vehicle/vehicleApi";
-import { skipToken } from "@reduxjs/toolkit/query";
 import { Testimonial } from "@/features/members/types";
+
+import { skipToken } from "@reduxjs/toolkit/query";
+import { useGetByIdVehicleDocQuery } from "@/redux/features/vehicle/vehicleApi";
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
+import { ContentLayout } from "@/components/admin-panel/content-layout";
 
 interface VehicleDoc {
   id: string;
@@ -68,58 +80,79 @@ const MemberIdPage = () => {
     }) ?? [];
 
   return (
-    <main className="flex justify-center items-center min-h-screen flex-col space-y-4 py-24 px-5">
-      {!!testimonials && (
-        <div className="container">
-          <TestimonialSliderCard
-            testimonials={testimonials}
-            refetch={refetch}
-          />
+    <ContentLayout title="Account">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/">Home</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/members">Members</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Documents</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <main className="flex justify-center items-center min-h-screen flex-col space-y-4 px-5">
+        {!!testimonials && (
+          <div className="container">
+            <TestimonialSliderCard
+              testimonials={testimonials}
+              refetch={refetch}
+            />
+          </div>
+        )}
+        {/* <Button variant="outline" size="sm" className="absolute top-16 left-72">
+          <Link href="/members" className="flex items-center space-x-2">
+            <MoveLeftIcon className="size-5 text-muted-foreground" />{" "}
+            <span>Back</span>
+          </Link>
+        </Button> */}
+        <h1 className="text-5xl font-semibold">Driver Document Vault</h1>
+        <p className="text-muted-foreground">
+          Securely upload and manage all driver-related documents in one place.
+        </p>
+        <div className="flex gap-4">
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="rounded-full shadow"
+                variant="outline"
+                onClick={handleOpen}
+              >
+                File upload
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-xl">
+              <DialogHeader>
+                <DialogTitle className="text-center">
+                  Upload your files
+                </DialogTitle>
+                <DialogDescription className="text-center">
+                  The only file upload you will ever need
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <ImageUpload
+                  id={memberId}
+                  progress={0}
+                  File={file}
+                  handleClose={handleClose}
+                  refetch={refetch}
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
-      )}
-      <Button variant="outline" size="sm" className="absolute top-16 left-72">
-        <Link href="/members" className="flex items-center space-x-2">
-          <MoveLeftIcon className="size-5 text-muted-foreground" />{" "}
-          <span>Back</span>
-        </Link>
-      </Button>
-      <h1 className="text-5xl font-semibold">Driver Document Vault</h1>
-      <p className="text-muted-foreground">
-        Securely upload and manage all driver-related documents in one place.
-      </p>
-      <div className="flex gap-4">
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              className="rounded-full shadow"
-              variant="outline"
-              onClick={handleOpen}
-            >
-              File upload
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-xl">
-            <DialogHeader>
-              <DialogTitle className="text-center">
-                Upload your files
-              </DialogTitle>
-              <DialogDescription className="text-center">
-                The only file upload you will ever need
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <ImageUpload
-                id={memberId}
-                progress={0}
-                File={file}
-                handleClose={handleClose}
-                refetch={refetch}
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-    </main>
+      </main>
+    </ContentLayout>
   );
 };
 
