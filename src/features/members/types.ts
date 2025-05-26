@@ -2,7 +2,7 @@ export enum VehicleType {
     DEFAULT = "",
     OPEN = "open",
     CLOSE = "close",
-    STANDARD = "standard",
+    CONTAINER = "container",
 }
 
 export enum FileTypes {
