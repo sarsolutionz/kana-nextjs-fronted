@@ -276,11 +276,11 @@ export const ImageUpload = ({
       <div>
         <label
           {...getRootProps()}
-          className="relative flex flex-col items-center justify-center w-full py-6 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+          className="relative flex flex-col items-center justify-center w-full py-6 border-2 border-gray-300 border-dashed dark:border-gray-500 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
         >
           <div className="text-center">
             <div className="border p-2 rounded-md max-w-min mx-auto">
-              <UploadCloud size={20} />
+              <UploadCloud size={20} className="dark:text-black" />
             </div>
 
             <p className="mt-2 text-sm text-gray-600">

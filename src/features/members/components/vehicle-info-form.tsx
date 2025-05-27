@@ -39,6 +39,7 @@ interface VehicleInfoFormProps {
   isSuccess: boolean;
   error: FetchBaseQueryError | SerializedError | undefined;
   isLoading: boolean;
+  reset?: () => void;
   defaultValues?: FormValues;
   onSubmit: (values: ApiFormValues) => void;
 }
@@ -48,6 +49,7 @@ export const VehicleInfoForm = ({
   data,
   isSuccess,
   isLoading,
+  reset,
   error,
   defaultValues,
   onSubmit,
@@ -64,8 +66,12 @@ export const VehicleInfoForm = ({
       if (!successToastShown.current) {
         successToastShown.current = true;
         const msg = data.message;
-        if (msg === undefined) return;
-        toast.success(msg);
+        if (msg !== undefined) {
+          toast.success(msg);
+        }
+        if (reset) {
+          reset();
+        }
       }
       form.reset(defaultValues);
     }
@@ -77,7 +83,7 @@ export const VehicleInfoForm = ({
         toast.error(errorMessage);
       }
     }
-  }, [isSuccess, data, error, form, defaultValues]);
+  }, [isSuccess, data, error, form, defaultValues, reset]);
 
   const handleSubmit = async (values: FormValues) => {
     await onSubmit(values);

@@ -23,7 +23,7 @@ type FormValues = z.input<typeof VehicleInfoSchema>;
 export const NewVehicleSheet = () => {
   const { isOpen, setIsOpen, close } = useCreateVehicleModal();
 
-  const [createVehicle, { data, isSuccess, error, isLoading }] =
+  const [createVehicle, { data, isSuccess, error, isLoading, reset }] =
     useCreateVehicleMutation();
 
   const onSubmit = async (values: FormValues) => {
@@ -48,6 +48,7 @@ export const NewVehicleSheet = () => {
             data={data}
             isSuccess={isSuccess}
             error={error}
+            reset={reset}
             isLoading={isLoading}
           />
         )}
