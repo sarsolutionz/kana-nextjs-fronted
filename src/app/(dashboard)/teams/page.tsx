@@ -31,7 +31,7 @@ const UsersPage = () => {
   });
 
   return (
-    <ContentLayout title="Account">
+    <ContentLayout title="Teams">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

@@ -80,7 +80,7 @@ const MemberIdPage = () => {
     }) ?? [];
 
   return (
-    <ContentLayout title="Account">
+    <ContentLayout title="Documents">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

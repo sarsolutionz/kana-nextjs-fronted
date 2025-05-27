@@ -33,7 +33,7 @@ const MembersPage = () => {
   const { vehicleData } = useVehicleWebSocket();
 
   return (
-    <ContentLayout title="Account">
+    <ContentLayout title="Members">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
