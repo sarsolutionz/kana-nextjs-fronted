@@ -123,7 +123,7 @@ export const TestimonialSliderCard = ({
             {testimonials.map((testimonial, index) => (
               <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
                 <Card className="shadow-sm p-1">
-                  <DropdownMenu>
+                  <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" className="size-8 p-0">
                         <MoreVertical className="size-4" />

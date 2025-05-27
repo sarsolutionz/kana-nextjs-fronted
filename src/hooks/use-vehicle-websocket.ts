@@ -1,4 +1,5 @@
 import { VehicleData } from "@/features/members/types";
+import { useGetAllVehicleInfoQuery } from "@/redux/features/vehicle/vehicleApi";
 import { useEffect, useState, useRef } from "react";
 
 export const useVehicleWebSocket = () => {
@@ -7,14 +8,29 @@ export const useVehicleWebSocket = () => {
     const [isConnected, setIsConnected] = useState(false);
     const [error, setError] = useState<Event | null>(null);
     const latestData = useRef<Map<number, VehicleData>>(new Map());
+    const wsRef = useRef<WebSocket | null>(null);
+
+    const { data: rtkData, isLoading: rtkLoading, refetch } = useGetAllVehicleInfoQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    });
+
+    useEffect(() => {
+        // Initialize with RTK data if available
+        if (rtkData && !rtkLoading) {
+            setVehicleData(rtkData);
+        }
+    }, [rtkData, rtkLoading]);
+
 
     useEffect(() => {
         // Initialize WebSocket connection
         const ws = new WebSocket(process.env.NEXT_PUBLIC_SOCKET_SERVER_URI!);
+        wsRef.current = ws;
 
         ws.onopen = () => {
             console.log("WebSocket Connected");
             setIsConnected(true);
+            refetch();
         };
 
         ws.onmessage = (event) => {
@@ -46,6 +62,10 @@ export const useVehicleWebSocket = () => {
 
                     return hasUpdates ? updatedData : prev;
                 });
+
+                if (items.some(item => item.criticalUpdate)) {
+                    refetch();
+                }
             } catch (error) {
                 console.error("Error parsing WebSocket data:", error);
             }
@@ -65,16 +85,18 @@ export const useVehicleWebSocket = () => {
 
         // Cleanup function
         return () => {
-            if (ws.readyState === WebSocket.OPEN) {
-                ws.close();
+            if (wsRef.current?.readyState === WebSocket.OPEN) {
+                wsRef.current?.close();
             }
         };
-    }, []);
+    }, [refetch]);
 
     return {
         socket,
-        vehicleData,
+        vehicleData:  rtkLoading ? [] : vehicleData,
         isConnected,
+        isLoading: rtkLoading,
+        rtkData,
         error,
     }
 }

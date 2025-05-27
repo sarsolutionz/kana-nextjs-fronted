@@ -5,7 +5,6 @@ import { Filter, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { useGetAllVehicleInfoQuery } from "@/redux/features/vehicle/vehicleApi";
 import { useFilterInfoModal } from "@/features/members/hooks/use-filter-info-modal";
 import { useCreateVehicleModal } from "@/features/members/hooks/use-create-vehicle-modal";
 
@@ -26,11 +25,8 @@ import { ContentLayout } from "@/components/admin-panel/content-layout";
 const MembersPage = () => {
   const [, setOpen] = useFilterInfoModal();
   const { open: isOpen } = useCreateVehicleModal();
-  const { isLoading } = useGetAllVehicleInfoQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
 
-  const { vehicleData } = useVehicleWebSocket();
+  const { vehicleData, isLoading } = useVehicleWebSocket();
 
   return (
     <ContentLayout title="Members">
