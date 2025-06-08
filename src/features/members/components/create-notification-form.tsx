@@ -26,6 +26,7 @@ import { DatePicker } from "@/components/date-picker";
 import { createNotificationSchema } from "../schemas";
 
 import { useCreateNotificationMutation } from "@/redux/features/vehicle/vehicleApi";
+import { TransportSelector } from "@/components/transport-selector";
 interface CreateNotificationFormProps {
   id?: string;
   onCancel?: () => void;
@@ -205,6 +206,7 @@ export const CreateNotificationForm = ({
                 </p>
               </div>
               <Separator className="bg-primary/10" />
+              <TransportSelector form={form} isLoading={isLoading} />
             </div>
             <FormField
               name="message"

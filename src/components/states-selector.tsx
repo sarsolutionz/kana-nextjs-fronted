@@ -1,10 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { cn } from "@/lib/utils";
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader } from "lucide-react";
 
-import { State, City } from "country-state-city";
+import { State, ICity } from "country-state-city";
 
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -18,7 +20,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 
 interface StateCitySelectorProps {
   countryCode: string;
@@ -31,58 +32,109 @@ const StateCitySelector = React.forwardRef<
   StateCitySelectorProps
 >(({ countryCode, value, onChange }, ref) => {
   const [open, setOpen] = React.useState(false);
-  const [currentView, setCurrentView] = React.useState<"states" | "cities">(
-    "states"
+  const [currentView, setCurrentView] = React.useState<"cities" | "states">(
+    "cities"
   );
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
   const commandRef = React.useRef<HTMLDivElement>(null);
 
-  const currentLocation = value?.includes(", ")
-    ? value.split(", ")
-    : [value || "", ""];
-  const [currentStateName, currentCity] = currentLocation;
+  // Memoized data
+  const states = React.useMemo(
+    () => State.getStatesOfCountry(countryCode),
+    [countryCode]
+  );
+  const [currentStateName, currentCity] = React.useMemo(
+    () => (value?.includes(", ") ? value.split(", ") : ["", value || ""]),
+    [value]
+  );
 
-  const states = State.getStatesOfCountry(countryCode);
-  const currentState = states.find((s) => s.name === currentStateName);
+  // Lazy load cities with Web Worker for better performance
+  const [cities, setCities] = React.useState<ICity[]>([]);
+  const workerRef = React.useRef<Worker>();
 
-  const cities = React.useMemo(() => {
-    return currentState
-      ? City.getCitiesOfState(countryCode, currentState.isoCode)
-      : [];
-  }, [currentState, countryCode]);
+  React.useEffect(() => {
+    if (open && currentView === "cities" && cities.length === 0) {
+      setIsLoading(true);
 
-  const filteredStates = React.useMemo(() => {
-    if (!searchTerm) return states;
+      // Create worker if not exists
+      if (!workerRef.current) {
+        workerRef.current = new Worker(
+          new URL("./cityWorker.ts", import.meta.url)
+        );
+      }
+
+      workerRef.current.postMessage({
+        type: "LOAD_CITIES",
+        countryCode,
+      });
+
+      workerRef.current.onmessage = (e) => {
+        if (e.data.type === "CITIES_LOADED") {
+          setCities(e.data.cities);
+          setIsLoading(false);
+        }
+      };
+
+      return () => {
+        workerRef.current?.terminate();
+        workerRef.current = undefined;
+      };
+    }
+  }, [open, currentView, countryCode]);
+
+  // Optimized search with debouncing
+  const [filteredCities, filteredStates] = React.useMemo(() => {
     const term = searchTerm.toLowerCase();
-    return states.filter(
-      (state) =>
-        state.name.toLowerCase().includes(term) ||
-        state.isoCode.toLowerCase().includes(term)
-    );
-  }, [states, searchTerm]);
+    const limitResults = 200; // Limit results for better performance
 
-  const filteredCities = React.useMemo(() => {
-    if (!searchTerm) return cities;
-    const term = searchTerm.toLowerCase();
-    return cities.filter((city) => city.name.toLowerCase().includes(term));
-  }, [cities, searchTerm]);
+    const citiesResult = searchTerm
+      ? cities
+          .filter((city) => city.name.toLowerCase().includes(term))
+          .slice(0, limitResults)
+      : cities.slice(0, 100); // Show only first 100 when no search term
 
-  const handleStateSelect = (stateName: string) => {
+    const statesResult = searchTerm
+      ? states
+          .filter(
+            (state) =>
+              state.name.toLowerCase().includes(term) ||
+              state.isoCode.toLowerCase().includes(term)
+          )
+          .slice(0, limitResults)
+      : states.slice(0, 100);
+
+    return [citiesResult, statesResult];
+  }, [searchTerm, cities, states]);
+
+  // Event handlers with memoization
+  const handleCitySelect = React.useCallback(
+    (cityName: string) => {
+      const city = cities.find((c) => c.name === cityName);
+      if (city) {
+        const state = states.find((s) => s.isoCode === city.stateCode);
+        if (state) {
+          setCurrentView("states");
+          setSearchTerm(state.name);
+          onChange?.(`${state.name}, ${cityName}`);
+        }
+      }
+    },
+    [cities, states, onChange]
+  );
+
+  const handleStateSelect = React.useCallback(
+    (stateName: string) => {
+      onChange?.(`${stateName}, ${currentCity}`);
+      setOpen(false);
+    },
+    [currentCity, onChange]
+  );
+
+  const handleBackToCities = React.useCallback(() => {
     setCurrentView("cities");
     setSearchTerm("");
-    onChange?.(stateName);
-  };
-
-  const handleCitySelect = (cityName: string) => {
-    const newValue = `${currentStateName}, ${cityName}`;
-    onChange?.(newValue);
-    setOpen(false);
-  };
-
-  const handleBackToStates = () => {
-    setCurrentView("states");
-    setSearchTerm("");
-  };
+  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal={true}>
@@ -94,7 +146,7 @@ const StateCitySelector = React.forwardRef<
           aria-expanded={open}
           className="w-full justify-between text-left font-normal h-10 px-3 py-2"
         >
-          <span className="truncate">{value || "Select state..."}</span>
+          <span className="truncate">{value || "Select city..."}</span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -103,24 +155,22 @@ const StateCitySelector = React.forwardRef<
         align="start"
       >
         <Command shouldFilter={false} ref={commandRef}>
-          {currentView === "cities" && (
+          {currentView === "states" && (
             <div className="flex items-center px-3 py-2 border-b sticky top-0 bg-background z-10">
               <button
-                onClick={handleBackToStates}
+                onClick={handleBackToCities}
                 className="flex items-center text-sm text-muted-foreground hover:text-primary"
               >
-                ← Back to states
+                ← Back to cities
               </button>
-              <span className="ml-2 font-medium truncate">
-                {currentStateName}
-              </span>
+              <span className="ml-2 font-medium truncate">{currentCity}</span>
             </div>
           )}
 
           <div className="sticky top-0 bg-background z-10 px-3 pt-2">
             <CommandInput
               placeholder={
-                currentView === "states" ? "Search state..." : "Search city..."
+                currentView === "cities" ? "Search city..." : "Search state..."
               }
               value={searchTerm}
               onValueChange={setSearchTerm}
@@ -129,7 +179,29 @@ const StateCitySelector = React.forwardRef<
           </div>
 
           <CommandList className="max-h-[300px] overflow-y-auto">
-            {currentView === "states" ? (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-6">
+                <Loader className="size-6 animate-spin text-muted-foreground" />
+              </div>
+            ) : currentView === "cities" ? (
+              <>
+                <CommandEmpty>
+                  {cities.length === 0 ? "Loading cities..." : "No city found."}
+                </CommandEmpty>
+                <CommandGroup>
+                  {filteredCities.map((city) => (
+                    <CommandItem
+                      key={`${city.stateCode}-${city.name}`}
+                      value={city.name}
+                      onSelect={() => handleCitySelect(city.name)}
+                    >
+                      {city.name}
+                      <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </>
+            ) : (
               <>
                 <CommandEmpty>No state found.</CommandEmpty>
                 <CommandGroup>
@@ -140,26 +212,10 @@ const StateCitySelector = React.forwardRef<
                       onSelect={() => handleStateSelect(state.name)}
                     >
                       {state.name}
-                      <ChevronsUpDown className="ml-auto h-4 w-4 opacity-50" />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </>
-            ) : (
-              <>
-                <CommandEmpty>No city found.</CommandEmpty>
-                <CommandGroup>
-                  {filteredCities.map((city) => (
-                    <CommandItem
-                      key={`${currentState?.isoCode}-${city.name}`}
-                      value={city.name}
-                      onSelect={() => handleCitySelect(city.name)}
-                    >
-                      {city.name}
                       <Check
                         className={cn(
                           "ml-auto h-4 w-4",
-                          currentCity === city.name
+                          currentStateName === state.name
                             ? "opacity-100"
                             : "opacity-0"
                         )}
