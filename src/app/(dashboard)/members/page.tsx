@@ -30,6 +30,7 @@ const MembersPage = () => {
 
   return (
     <ContentLayout title="Members">
+      <div className="max-w-screen-2xl mx-auto w-full pb-10">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -49,7 +50,6 @@ const MembersPage = () => {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="max-w-screen-2xl mx-auto w-full pb-10">
         <Card className="border drop-shadow-sm">
           <CardHeader className="gap-y-2 lg:flex-row lg:items-center lg:justify-between">
             <CardTitle className="text-xl line-clamp-1">
