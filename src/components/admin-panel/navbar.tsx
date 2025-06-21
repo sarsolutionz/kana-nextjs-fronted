@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Mail, Search } from "lucide-react";
 
 import { UserNav } from "@/components/admin-panel/user-nav";
@@ -12,11 +13,25 @@ interface NavbarProps {
 
 export function Navbar({ title }: NavbarProps) {
   return (
-    <header className="sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary">
+    <header
+      className={cn(
+        title === "Dashboard"
+          ? "sticky top-0 z-10 w-full dark:shadow-secondary 2xl:px-7"
+          : "sticky top-0 z-10 w-full bg-background/95 shadow backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:shadow-secondary"
+      )}
+    >
       <div className="mx-4 sm:mx-8 flex h-14 items-center">
         <div className="flex items-center space-x-4 lg:space-x-0">
           <SheetMenu />
-          <h1 className="font-bold hidden sm:block">{title}</h1>
+          <h1
+            className={cn(
+              title === "Dashboard"
+                ? "font-bold hidden text-white sm:block"
+                : "font-bold hidden sm:block"
+            )}
+          >
+            {title}
+          </h1>
         </div>
         <div className="flex-1" />
         <div className="grow-[2] shrink px-1">
