@@ -253,7 +253,7 @@ const columns: ColumnDef<z.infer<typeof dashboardFormSchema>>[] = [
     accessorKey: "message",
     header: "Message",
     cell: ({ row }) => (
-      <Badge variant="outline" className="text-muted-foreground px-1.5 truncate">
+      <Badge variant="outline" className="text-muted-foreground px-1.5 truncate max-w-[200px]">
         {row.original.message}
       </Badge>
     ),
