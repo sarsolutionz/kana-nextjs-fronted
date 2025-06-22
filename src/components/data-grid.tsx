@@ -17,8 +17,11 @@ export const DataGrid = () => {
   const isLoading = summary?.isLoading;
 
   const params = useSearchParams();
-  const to = params.get("to") || undefined;
-  const from = params.get("from") || undefined;
+  const toParam = params.get("to") || undefined;
+  const fromParam = params.get("from") || undefined;
+
+  const to = toParam ? new Date(toParam) : undefined;
+  const from = fromParam ? new Date(fromParam) : undefined;
 
   const dateRangeLabel = formatDateRange({ to, from });
 

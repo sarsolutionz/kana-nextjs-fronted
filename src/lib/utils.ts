@@ -32,8 +32,8 @@ export function snakeCaseToTitleCase(str: string) {
 };
 
 type Period = {
-  from: string | Date | undefined;
-  to: string | Date | undefined;
+  from: Date | undefined;
+  to: Date | undefined;
 };
 
 export function formatDateRange(period?: Period) {
