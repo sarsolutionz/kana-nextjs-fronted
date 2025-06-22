@@ -647,9 +647,9 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
   }
 
   return (
-    <Drawer 
-      open={drawerOpen} 
-      onOpenChange={setDrawerOpen} 
+    <Drawer
+      open={drawerOpen}
+      onOpenChange={setDrawerOpen}
       direction={isMobile ? "bottom" : "right"}
     >
       <DrawerContent>
@@ -696,7 +696,13 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
                     <FormItem className="space-y-1">
                       <FormLabel>Rate</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Enter rate" />
+                        <Input
+                          {...field}
+                          onBlur={() => {
+                            field.onChange(Number(field.value));
+                          }}
+                          placeholder="Enter rate"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -709,7 +715,13 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
                     <FormItem className="space-y-1">
                       <FormLabel>Weight</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Enter weight" />
+                        <Input
+                          {...field}
+                          onBlur={() => {
+                            field.onChange(Number(field.value));
+                          }}
+                          placeholder="Enter weight"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -729,21 +741,21 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
                   )}
                 />
                 <FormField
-                name="date"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date</FormLabel>
-                    <FormControl>
-                      <DatePicker
-                        value={field.value}
-                        onChange={field.onChange}
-                        disabled={isLoading}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+                  name="date"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date</FormLabel>
+                      <FormControl>
+                        <DatePicker
+                          value={field.value}
+                          onChange={field.onChange}
+                          disabled={isLoading}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="is_read"
