@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import Link from "next/link";
 
@@ -41,7 +42,7 @@ export default function DashboardPage() {
     if (isSuccess) {
       summary.refetch();
     }
-  }, [isSuccess, summary]);
+  }, [isSuccess]);
 
   const sidebar = useStore(useSidebar, (x) => x);
   if (!sidebar) return null;

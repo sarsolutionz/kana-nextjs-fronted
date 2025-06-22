@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { z } from "zod";
@@ -631,7 +632,7 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
       summary?.refetch();
       setDrawerOpen(false);
     }
-  }, [isSuccess, error, form, summary, setDrawerOpen, data]);
+  }, [isSuccess, error, form, setDrawerOpen, data]);
 
   const onSubmit = async (values: z.infer<typeof dashboardFormSchema>) => {
     const modifiedValues = {
