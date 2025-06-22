@@ -73,7 +73,7 @@ export const CreateNotificationForm = ({
     };
 
     const payload = {
-      vehicle_ids: id?.split(",").map(Number),
+      vehicle_ids: id?.split(",").map(String),
       notifications: [modifiedValues],
     };
     await createNotification(payload);

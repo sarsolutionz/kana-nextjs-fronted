@@ -29,7 +29,6 @@ import { DataTable } from "@/components/admin-panel/data-table";
 import { useStore } from "@/hooks/use-store";
 import { useSidebar } from "@/hooks/use-sidebar";
 
-import data from "@/app/(dashboard)/dashboard/data.json";
 import { useGetSummary } from "@/hooks/use-get-summary";
 import { useEffect } from "react";
 
@@ -42,7 +41,7 @@ export default function DashboardPage() {
     if (isSuccess) {
       summary.refetch();
     }
-  }, [isSuccess, summary?.refetch]);
+  }, [isSuccess, summary]);
 
   const sidebar = useStore(useSidebar, (x) => x);
   if (!sidebar) return null;

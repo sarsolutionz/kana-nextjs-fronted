@@ -34,7 +34,6 @@ import {
   IconGripVertical,
   IconLayoutColumns,
   IconLoader,
-  IconPlus,
 } from "@tabler/icons-react";
 
 import {
@@ -66,10 +65,8 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import {
   DropdownMenu,
@@ -633,8 +630,8 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
       form.reset(data?.message);
       summary?.refetch();
       setDrawerOpen(false);
-    } 
-  }, [isSuccess, error, form, summary?.refetch]);
+    }
+  }, [isSuccess, error, form, summary, setDrawerOpen, data]);
 
   const onSubmit = async (values: z.infer<typeof dashboardFormSchema>) => {
     const modifiedValues = {
@@ -650,7 +647,11 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
   }
 
   return (
-    <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} direction={isMobile ? "bottom" : "right"}>
+    <Drawer 
+      open={drawerOpen} 
+      onOpenChange={setDrawerOpen} 
+      direction={isMobile ? "bottom" : "right"}
+    >
       <DrawerContent>
         <DrawerHeader className="gap-1">
           <DrawerTitle>Edit Notification</DrawerTitle>
