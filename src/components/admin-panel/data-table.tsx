@@ -107,6 +107,7 @@ import { DatePicker } from "../date-picker";
 import { useEditNotificationByIdMutation } from "@/redux/features/vehicle/vehicleApi";
 import { useGetSummary } from "@/hooks/use-get-summary";
 import { format } from "date-fns";
+import { toast } from "sonner";
 
 // Create a separate component for the drag handle
 function DragHandle({ id }: { id: string }) {
@@ -337,6 +338,15 @@ export function DataTable({
     pageSize: 10,
   });
   const sortableId = React.useId();
+  // Ensure data is cleared when initialData is empty
+  React.useEffect(() => {
+    if (!initialData || initialData.length === 0) {
+      setData([]);
+    } else {
+      setData(initialData);
+    }
+  }, [initialData]);
+
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
     useSensor(TouchSensor, {}),
@@ -627,12 +637,13 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
   const [editNotificationById, { isSuccess, isLoading, error, data }] = useEditNotificationByIdMutation();
 
   React.useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && data.message) {
       form.reset(data?.message);
       summary?.refetch();
+      toast.success("Notification updated successfully.");
       setDrawerOpen(false);
     }
-  }, [isSuccess, error, form, setDrawerOpen, data]);
+  }, [isSuccess, error, form, summary?.refetch, data]);
 
   const onSubmit = async (values: z.infer<typeof dashboardFormSchema>) => {
     const modifiedValues = {

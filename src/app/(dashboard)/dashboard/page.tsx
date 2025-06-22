@@ -40,9 +40,9 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (isSuccess) {
-      summary.refetch();
+     summary.refetch();
     }
-  }, [isSuccess]);
+  }, [isSuccess, summary?.refetch]);
 
   const sidebar = useStore(useSidebar, (x) => x);
   if (!sidebar) return null;
