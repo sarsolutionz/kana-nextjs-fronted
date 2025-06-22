@@ -4,7 +4,7 @@ import { RootState } from "../auth/authSlice";
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
-        baseUrl: "http://127.0.0.1:8000/api/",
+        baseUrl: process.env.NEXT_PUBLIC_SERVER_URI!, // Base URL for the API
         prepareHeaders(headers, { getState }) {
             const accessToken = (getState() as RootState)?.auth?.access_token?.access;
 
