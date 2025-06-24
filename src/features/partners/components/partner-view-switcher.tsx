@@ -17,8 +17,14 @@ import { DataFilters } from "@/features/partners/components/data-filters";
 
 import { columns } from "@/features/partners/components/columns";
 import { PartnerColumns } from "@/features/partners/components/partner-columns";
+import { useGetDriverInfoQuery } from "@/redux/features/partner/partnerApi";
 
 export const PartnerViewSwitcher = () => {
+    const { data, isLoading } = useGetDriverInfoQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    });
+    const drivers = data?.drivers ?? [];
+
     const [view, setView] = useQueryState("partner-view", {
         defaultValue: "notification",
     });
@@ -52,7 +58,7 @@ export const PartnerViewSwitcher = () => {
                         <Separator className="my-4" />
                     </>
                 }
-                {false ? (
+                {isLoading ? (
                     <div className="w-full border rounded-lg h-[200px] flex flex-col items-center justify-center">
                         <Loader className="size-5 animate-spin text-muted-foreground" />
                     </div>
@@ -68,7 +74,8 @@ export const PartnerViewSwitcher = () => {
                         <TabsContent value="partner" className="mt-0">
                             <DataTable
                                 columns={PartnerColumns}
-                                data={[]}
+                                disabled={isLoading}
+                                data={drivers}
                                 filterKey="email"
                                 path="partner"
                             />

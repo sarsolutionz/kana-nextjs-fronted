@@ -15,7 +15,7 @@ export const apiSlice = createApi({
             return headers;
         },
     }),
-    tagTypes: ["Vehicle", "VehicleDocs", "Dashboard", "Notfication", "user"],
+    tagTypes: ["Vehicle", "VehicleDocs", "Dashboard", "Notfication", "Driver", "user"],
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     endpoints: (builder) => ({}),
 });

@@ -23,4 +23,6 @@ export type Partner = {
     email: string,
     number: number,
     is_deleted: boolean,
+    created_at: Date,
+    updated_at: Date,
 }

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 
 import { EditTeamModal } from "@/features/teams/components/edit-team-modal";
 import { CreateTeamModal } from "@/features/teams/components/create-team-modal";
+import { EditPartnerModal } from "@/features/partners/components/edit-partner-modal";
 import { CreateNotificationModal } from "@/features/members/components/create-notification-modal";
 import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
 
@@ -43,6 +44,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <FixRadixAriaHidden />
       <CreateTeamModal />
       <EditTeamModal />
+      <EditPartnerModal />
       <CreateNotificationModal />
       {/* <div className="flex w-full h-full">
         <div className="fixed left-0 top-0 hidden lg:block lg:w-[264px] h-full overflow-y-auto">

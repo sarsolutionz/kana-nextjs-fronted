@@ -1,13 +1,15 @@
 "use client";
 
+import { format } from "date-fns";
 import { ArrowUpDown, CircleCheck, CircleXIcon, MoreVertical } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 import { Partner } from "@/features/partners/types";
 import { Checkbox } from "@/components/ui/checkbox";
-import { NotificationActions } from "./notification-actions";
+import { PartnerActions } from "./partner-actions";
 
 export const PartnerColumns: ColumnDef<Partner>[] = [
     {
@@ -117,16 +119,34 @@ export const PartnerColumns: ColumnDef<Partner>[] = [
         },
     },
     {
+        accessorKey: "created_at",
+        header: "Created At",
+        cell: ({ row }) => (
+            <Badge variant="outline" className="text-muted-foreground px-1.5">
+                {format(row.original.created_at, "yyyy-MM-dd")}
+            </Badge>
+        ),
+    },
+    {
+        accessorKey: "updated_at",
+        header: "Updated At",
+        cell: ({ row }) => (
+            <Badge variant="outline" className="text-muted-foreground px-1.5">
+                {format(row.original.updated_at, "yyyy-MM-dd")}
+            </Badge>
+        ),
+    },
+    {
         id: "actions",
         cell: ({ row }) => {
             const id = row.original.id;
 
             return (
-                <NotificationActions id={id}>
+                <PartnerActions id={id}>
                     <Button variant="ghost" className="size-8 p-0">
                         <MoreVertical className="size-4" />
                     </Button>
-                </NotificationActions>
+                </PartnerActions>
             )
         },
     },
