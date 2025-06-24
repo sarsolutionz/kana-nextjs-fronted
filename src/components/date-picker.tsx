@@ -16,9 +16,17 @@ type Props = {
   value?: Date;
   onChange?: SelectSingleEventHandler;
   disabled?: boolean;
+  placeholder?: string;
+  className?: string;
 };
 
-export const DatePicker = ({ value, onChange, disabled }: Props) => {
+export const DatePicker = ({ 
+  value, 
+  onChange, 
+  disabled, 
+  className, 
+  placeholder="Pick a date" 
+}: Props) => {
   return (
     <Popover modal={true}>
       <PopoverTrigger asChild>
@@ -27,11 +35,12 @@ export const DatePicker = ({ value, onChange, disabled }: Props) => {
           variant="outline"
           className={cn(
             "w-full justify-start text-left font-normal",
-            !value && "text-muted-foreground"
+            !value && "text-muted-foreground",
+            className
           )}
         >
           <CalenderIcon className="size-4 mr-2" />
-          {value ? format(value, "yyyy-MM-dd") : <span>Pick a date</span>}
+          {value ? format(value, "yyyy-MM-dd") : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent>
