@@ -24,9 +24,23 @@ export const partnerApi = apiSlice.injectEndpoints({
                 method: "GET",
                 credentials: "include" as const,
             }),
-            providesTags: ["user"],
+            providesTags: ["Driver"],
+        }),
+        partnerSignUp: builder.mutation({
+            query: (data) => ({
+                url: "mobile-auth/signup/1/",
+                method: "POST",
+                body: data,
+                credentials: "include" as const,
+            }),
+            invalidatesTags: ["Driver"],
         }),
     }),
 });
 
-export const { useGetDriverInfoQuery, useEditPartnerByIdMutation, useGetPartnerByIdQuery } = partnerApi;
+export const {
+    useGetDriverInfoQuery,
+    useEditPartnerByIdMutation,
+    useGetPartnerByIdQuery,
+    usePartnerSignUpMutation,
+} = partnerApi;

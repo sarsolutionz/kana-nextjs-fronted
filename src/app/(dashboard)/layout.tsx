@@ -1,13 +1,12 @@
 'use client';
 import { useEffect } from "react";
 
-// import { Navbar } from "@/components/navbar";
-// import { Sidebar } from "@/components/sidebar";
-
 import { EditTeamModal } from "@/features/teams/components/edit-team-modal";
 import { CreateTeamModal } from "@/features/teams/components/create-team-modal";
 import { EditPartnerModal } from "@/features/partners/components/edit-partner-modal";
+import { CreatePartnerModal } from "@/features/partners/components/create-partner-modal";
 import { CreateNotificationModal } from "@/features/members/components/create-notification-modal";
+
 import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
 
 interface DashboardLayoutProps {
@@ -43,21 +42,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     <div className="min-h-screen">
       <FixRadixAriaHidden />
       <CreateTeamModal />
+      <CreatePartnerModal />
       <EditTeamModal />
       <EditPartnerModal />
       <CreateNotificationModal />
-      {/* <div className="flex w-full h-full">
-        <div className="fixed left-0 top-0 hidden lg:block lg:w-[264px] h-full overflow-y-auto">
-          <Sidebar />
-        </div>
-        <div className="lg:pl-[264px] w-full">
-          <div className="w-full h-full">
-            <Navbar />
-            <main className="h-full py-8 px-6 flex flex-col">{children}</main>
-          </div>
-        </div>
-      </div> */}
-      <AdminPanelLayout>{children}</AdminPanelLayout>
+      <AdminPanelLayout>
+        {children}
+      </AdminPanelLayout>
     </div>
   );
 };

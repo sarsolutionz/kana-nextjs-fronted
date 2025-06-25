@@ -32,9 +32,7 @@ export const PartnerActions = ({ id, children }: PartnerActionsProps) => {
 
     const [deleteDriverById, { isLoading, isSuccess }] =
         useDeleteDriverByIdMutation();
-    
-        console.log(isSuccess);
-        
+
     useEffect(() => {
         if (isSuccess) {
             router.refresh();

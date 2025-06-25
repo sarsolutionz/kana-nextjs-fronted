@@ -19,7 +19,10 @@ import { columns } from "@/features/partners/components/columns";
 import { PartnerColumns } from "@/features/partners/components/partner-columns";
 import { useGetDriverInfoQuery } from "@/redux/features/partner/partnerApi";
 
+import { useCreatePartnerModal } from "../hooks/use-create-partner-modal";
+
 export const PartnerViewSwitcher = () => {
+    const { open } = useCreatePartnerModal();
     const { data, isLoading } = useGetDriverInfoQuery(undefined, {
         refetchOnMountOrArgChange: true,
     });
@@ -46,8 +49,8 @@ export const PartnerViewSwitcher = () => {
                             Partner
                         </TabsTrigger>
                     </TabsList>
-                    <Button onClick={() => { }} size="sm" className="w-full lg:w-auto">
-                        <PlusIcon className="size-4 mr-2" />
+                    <Button onClick={open} size="sm" className="w-full lg:w-auto">
+                        <PlusIcon className="size-4 mr-1" />
                         New Partner
                     </Button>
                 </div>
