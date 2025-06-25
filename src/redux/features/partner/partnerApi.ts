@@ -35,6 +35,14 @@ export const partnerApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["Driver"],
         }),
+        deletePartnerById: builder.mutation({
+            query: (id) => ({
+                url: `mobile-auth/delete-partner?driver_id=${id}`,
+                method: "POST",
+                credentials: "include" as const,
+            }),
+            invalidatesTags: ["Driver"],
+        }),
     }),
 });
 
@@ -43,4 +51,5 @@ export const {
     useEditPartnerByIdMutation,
     useGetPartnerByIdQuery,
     usePartnerSignUpMutation,
+    useDeletePartnerByIdMutation,
 } = partnerApi;

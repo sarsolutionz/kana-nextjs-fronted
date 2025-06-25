@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Edit, Trash2 } from "lucide-react";
@@ -13,7 +14,7 @@ import {
 
 import { useEditPartnerModal } from "../hooks/use-edit-partner-modal";
 
-import { useDeleteDriverByIdMutation } from "@/redux/features/auth/authApi";
+import { useDeletePartnerByIdMutation } from "@/redux/features/partner/partnerApi";
 
 interface PartnerActionsProps {
     id: string;
@@ -30,19 +31,26 @@ export const PartnerActions = ({ id, children }: PartnerActionsProps) => {
         "Are you sure you want to delete this partner? This action cannot be undone.",
     );
 
-    const [deleteDriverById, { isLoading, isSuccess }] =
-        useDeleteDriverByIdMutation();
+    const [deletePartnerById, { isLoading, isSuccess, data }] =
+        useDeletePartnerByIdMutation();
+
+    const status = data?.status ?? undefined
+    const message = data?.message ?? undefined
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess && status === 200) {
+            toast.success(message);
             router.refresh();
         }
-    }, [isSuccess, router]);
+        if (status === 400) {
+            toast.error(message);
+        };
+    }, [message, status, isSuccess, router]);
 
     const onDelete = async () => {
         const ok = await confirm();
         if (!ok) return;
-        await deleteDriverById(id);
+        await deletePartnerById(id);
     };
 
     return (
@@ -51,17 +59,14 @@ export const PartnerActions = ({ id, children }: PartnerActionsProps) => {
             <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                        onClick={() => open(id)}
-                        className="font-medium p-[10px]"
-                    >
+                    <DropdownMenuItem onClick={() => open(id)}>
                         <Edit className="size-4 mr-2 stroke-2" />
                         Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem
                         onClick={() => onDelete()}
                         disabled={isLoading}
-                        className="text-amber-700 focus:text-amber-700 font-medium p-[10px]"
+                        className="text-amber-700 focus:text-amber-700 font-medium"
                     >
                         <Trash2 className="size-4 mr-2 stroke-2" />
                         Delete
