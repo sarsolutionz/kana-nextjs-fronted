@@ -13,6 +13,7 @@ export type Notification = {
     message: string,
     contact: string,
     is_read: boolean,
+    is_accepted?: boolean,
     date: Date,
     created_at: string,
 };
@@ -25,4 +26,11 @@ export type Partner = {
     is_deleted: boolean,
     created_at: Date,
     updated_at: Date,
+}
+
+export type Creators = {
+    id: string,
+    name: string,
+    email: string,
+    number: string,
 }

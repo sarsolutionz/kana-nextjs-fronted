@@ -2,13 +2,13 @@
 
 import { ArrowUpDown, MoreVertical } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
-import { IconCircleCheckFilled, IconLoader } from "@tabler/icons-react";
+import { IconCircleCheckFilled, IconLoader, IconX } from "@tabler/icons-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { Notification } from "@/features/partners/types";
-import { Checkbox } from "@/components/ui/checkbox";
 import { NotificationActions } from "@/features/partners/components/notification-actions";
 
 export const columns: ColumnDef<Notification>[] = [
@@ -89,12 +89,22 @@ export const columns: ColumnDef<Notification>[] = [
         },
         cell: ({ row }) => (
             <Badge variant="outline" className="text-muted-foreground px-1.5">
-                {row.original.is_read ? (
-                    <IconCircleCheckFilled className="size-4 fill-green-500 dark:fill-green-400" />
-                ) : (
-                    <IconLoader className="size-4" />
-                )}
-                {row.original.is_read ? "Done" : "processing"}
+                {
+                    row.original.is_read && row.original.is_accepted ? (
+                        <IconCircleCheckFilled className="size-4 fill-green-500 dark:fill-green-400" />
+                    ) : !row.original.is_read && row.original.is_accepted ? (
+                        <IconX className="size-4 text-red-500 dark:text-red-400" />
+                    ) : (
+                        <IconLoader className="size-4" />
+                    )
+                }
+                {
+                    row.original.is_read && row.original.is_accepted
+                        ? "Done"
+                        : !row.original.is_read && row.original.is_accepted
+                            ? "Rejected"
+                            : "Processing"
+                }
             </Badge>
         ),
     },

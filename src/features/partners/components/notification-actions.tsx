@@ -36,7 +36,7 @@ export const NotificationActions = ({ id, children }: NotificationActionsProps) 
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem
                         onClick={() => open(id)}
-                        className="font-medium p-[10px]"
+                        className="font-medium"
                     >
                         <Edit className="size-4 mr-2 stroke-2" />
                         Edit
@@ -44,7 +44,7 @@ export const NotificationActions = ({ id, children }: NotificationActionsProps) 
                     <DropdownMenuItem
                         onClick={onDelete}
                         disabled={false}
-                        className="text-amber-700 focus:text-amber-700 font-medium p-[10px]"
+                        className="text-amber-700 focus:text-amber-700 font-medium"
                     >
                         <Trash2 className="size-4 mr-2 stroke-2" />
                         Delete

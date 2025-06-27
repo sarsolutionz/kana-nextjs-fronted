@@ -2,27 +2,32 @@ import { ListChecksIcon, UserIcon } from "lucide-react";
 
 import { DatePicker } from "@/components/date-picker";
 
-import { NotificationStatus } from "@/features/partners/types";
+import { Creators, NotificationStatus } from "@/features/partners/types";
 import { useNotificationFilters } from "@/features/partners/hooks/use-notification-filters";
 
-import { 
-    Select, 
-    SelectContent, 
-    SelectItem, 
-    SelectSeparator, 
-    SelectTrigger, 
-    SelectValue 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectSeparator,
+    SelectTrigger,
+    SelectValue
 } from "@/components/ui/select";
+import { format } from "date-fns";
 
-export const DataFilters = () => {
-    const [{ partnerId, status, dueDate }, setNotifications] = useNotificationFilters();
+interface DataFiltersProps {
+    creators: Creators[];
+}
+
+export const DataFilters = ({ creators }: DataFiltersProps) => {
+    const [{ creatorId, status, dueDate }, setNotifications] = useNotificationFilters();
 
     const onStatusChange = (value: string) => {
         setNotifications({ status: value === "all" ? null : (value as NotificationStatus) });
     }
 
     const onPartnerChange = (value: string) => {
-        setNotifications({ partnerId: value === "all" ? null : (value as string) });
+        setNotifications({ creatorId: value === "all" ? null : (value as string) });
     };
 
     return (
@@ -46,7 +51,7 @@ export const DataFilters = () => {
                 </SelectContent>
             </Select>
             <Select
-                defaultValue={partnerId || undefined}
+                defaultValue={creatorId || undefined}
                 onValueChange={(value) => onPartnerChange(value)}
             >
                 <SelectTrigger className="w-full lg:w-auto h-8">
@@ -56,9 +61,13 @@ export const DataFilters = () => {
                     </div>
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="all">All partners</SelectItem>
+                    <SelectItem value="all">All creators</SelectItem>
                     <SelectSeparator />
-                    <SelectItem value="partner1">Partner 1</SelectItem>
+                    {creators.map((creator) => (
+                        <SelectItem key={creator.id} value={creator.name}>
+                            {creator.name}
+                        </SelectItem>
+                    ))}
                 </SelectContent>
             </Select>
             <DatePicker
@@ -66,7 +75,7 @@ export const DataFilters = () => {
                 className="h-8 w-full lg:w-auto"
                 value={dueDate ? new Date(dueDate) : undefined}
                 onChange={(date) => {
-                    setNotifications({ dueDate: date ? date.toISOString() : undefined });
+                    setNotifications({ dueDate: date ? format(date, 'yyyy-MM-dd') : undefined });
                 }}
             />
         </div>

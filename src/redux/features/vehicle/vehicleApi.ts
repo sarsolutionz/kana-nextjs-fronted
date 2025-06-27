@@ -1,3 +1,4 @@
+import { format, parseISO } from "date-fns";
 import { apiSlice } from "../api/apiSlice";
 
 export const vehicleApi = apiSlice.injectEndpoints({
@@ -96,6 +97,23 @@ export const vehicleApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Notfication"],
     }),
+    getAllNotificationByFilter: builder.query({
+      query: (paramsObj?: { read?: boolean; accepted?: boolean; user?: string; date?: string }) => {
+        const params = new URLSearchParams();
+
+        if (paramsObj?.read !== undefined) params.append('is_read', String(paramsObj.read));
+        if (paramsObj?.accepted !== undefined) params.append('is_accepted', String(paramsObj.accepted));
+        if (paramsObj?.user) params.append('username', paramsObj.user);
+        if (paramsObj?.date) params.append('date', format(parseISO(paramsObj.date), "yyyy-MM-dd"));
+
+        return {
+          url: `member/get-all-notifications?${params.toString()}`,
+          method: "GET",
+          credentials: "include" as const,
+        };
+      },
+      providesTags: ["Notfication"],
+    }),
   }),
 });
 
@@ -110,4 +128,5 @@ export const {
   useCreateNotificationMutation,
   useDeleteVehicleByIdMutation,
   useEditNotificationByIdMutation,
+  useGetAllNotificationByFilterQuery,
 } = vehicleApi;

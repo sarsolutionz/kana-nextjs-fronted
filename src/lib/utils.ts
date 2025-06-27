@@ -2,6 +2,8 @@ import { clsx, type ClassValue } from "clsx"
 import { subDays, format } from "date-fns";
 import { twMerge } from "tailwind-merge"
 
+import { NotificationStatus } from "@/features/partners/types";
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -90,3 +92,16 @@ export function formatPercentage(
 
   return result;
 };
+
+export function getNotificationFlags(status: NotificationStatus | null) {
+  switch (status) {
+    case "DONE":
+      return { read: true, accepted: true };
+    case "IN_PROGRESS":
+      return { read: false, accepted: false };
+    case "REJECTED":
+      return { read: false, accepted: true };
+    default:
+      return { read: true, accepted: false };
+  }
+}

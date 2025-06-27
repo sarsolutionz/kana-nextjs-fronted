@@ -17,21 +17,42 @@ import { DataFilters } from "@/features/partners/components/data-filters";
 
 import { columns } from "@/features/partners/components/columns";
 import { PartnerColumns } from "@/features/partners/components/partner-columns";
+
 import { useGetDriverInfoQuery } from "@/redux/features/partner/partnerApi";
+import { useGetAllNotificationByFilterQuery } from "@/redux/features/vehicle/vehicleApi";
+
+import { getNotificationFlags } from "@/lib/utils";
 
 import { useCreatePartnerModal } from "../hooks/use-create-partner-modal";
+import { useNotificationFilters } from "../hooks/use-notification-filters";
 
 export const PartnerViewSwitcher = () => {
     const { open } = useCreatePartnerModal();
-    const { data, isLoading } = useGetDriverInfoQuery(undefined, {
+    const [{ creatorId, status, dueDate }] = useNotificationFilters();
+    const { read, accepted } = getNotificationFlags(status);
+
+    const { data: DriverInfo, isLoading: driverLoading } = useGetDriverInfoQuery(undefined, {
         refetchOnMountOrArgChange: true,
     });
-    const drivers = data?.drivers ?? [];
+    const drivers = DriverInfo?.drivers ?? [];
+
+    const { data: NotificationsData, isLoading: notificationLoading } = useGetAllNotificationByFilterQuery({
+        read: read,
+        accepted: accepted,
+        date: dueDate ?? undefined,
+        user: creatorId ?? undefined,
+    }, {
+        refetchOnMountOrArgChange: true,
+    });
+
+    const notfications = NotificationsData?.data ?? [];
+    const creators = NotificationsData?.creators ?? []
 
     const [view, setView] = useQueryState("partner-view", {
         defaultValue: "notification",
     });
 
+    const isLoading = driverLoading || notificationLoading;
 
     return (
         <Tabs
@@ -57,7 +78,7 @@ export const PartnerViewSwitcher = () => {
                 <Separator className="my-4" />
                 {view === "notification" &&
                     <>
-                        <DataFilters />
+                        <DataFilters creators={creators} />
                         <Separator className="my-4" />
                     </>
                 }
@@ -70,7 +91,8 @@ export const PartnerViewSwitcher = () => {
                         <TabsContent value="notification" className="mt-0">
                             <DataTable
                                 columns={columns}
-                                data={[]}
+                                disabled={isLoading}
+                                data={notfications}
                                 path="notification"
                             />
                         </TabsContent>

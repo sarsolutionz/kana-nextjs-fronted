@@ -5,7 +5,7 @@ import { NotificationStatus } from "@/features/partners/types";
 export const useNotificationFilters = () => {
     return useQueryStates({
         status: parseAsStringEnum(Object.values(NotificationStatus)),
-        partnerId: parseAsString,
+        creatorId: parseAsString,
         search: parseAsString,
         dueDate: parseAsString,
     });
