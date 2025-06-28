@@ -122,6 +122,14 @@ export const vehicleApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Notfication"],
     }),
+    deleteNotificationById: builder.mutation({
+      query: (id) => ({
+        url: `member/notifications/bulk-delete?notification_ids=${id}`,
+        method: "POST",
+        credentials: "include" as const,
+      }),
+      invalidatesTags: ["Notfication"],
+    }),
   }),
 });
 
@@ -138,4 +146,5 @@ export const {
   useEditNotificationByIdMutation,
   useGetAllNotificationByFilterQuery,
   useGetNotificationByIdQuery,
+  useDeleteNotificationByIdMutation,
 } = vehicleApi;

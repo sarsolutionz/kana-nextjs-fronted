@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import {
     ColumnDef,
     ColumnFiltersState,
@@ -26,7 +28,10 @@ import {
 import { Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
-interface DataTableProps<TData, TValue> {
+import { useConfirm } from "@/hooks/use-confirm";
+import { useDeleteNotificationByIdMutation } from "@/redux/features/vehicle/vehicleApi";
+
+interface DataTableProps<TData extends { id: string | number }, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     filterKey?: string;
@@ -34,13 +39,35 @@ interface DataTableProps<TData, TValue> {
     path: string;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends { id: string | number }, TValue>({
     columns,
     data,
     filterKey = "",
     disabled,
     path,
 }: DataTableProps<TData, TValue>) {
+    const router = useRouter();
+    const [ConfrimDialog, confirm] = useConfirm(
+        "Are you sure?",
+        "You are about to perform a bulk delete."
+    );
+
+    const [deleteNotificationById, { isLoading, isSuccess, data: deleteData }] =
+        useDeleteNotificationByIdMutation();
+
+    const status = deleteData?.status ?? undefined
+    const message = deleteData?.message ?? undefined
+
+    React.useEffect(() => {
+        if (isSuccess && status === 200) {
+            toast.success(message);
+            router.refresh();
+        }
+        if (status === 400) {
+            toast.error(message);
+        };
+    }, [message, status, isSuccess, router]);
+
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -63,6 +90,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
+            <ConfrimDialog />
             <div className="flex items-center pb-4">
                 {path === "partner" &&
                     <Input
@@ -78,11 +106,18 @@ export function DataTable<TData, TValue>({
                 }
                 {table.getFilteredSelectedRowModel().rows.length > 0 && (
                     <Button
-                        disabled={disabled}
+                        disabled={isLoading || disabled}
                         size="sm"
                         variant="outline"
                         className="text-amber-700 hover:text-amber-700 ml-auto font-normal text-xs"
-                        onClick={() => { }}
+                        onClick={async () => {
+                            const ok = await confirm();
+                            if (ok) {
+                                const ids = table.getFilteredSelectedRowModel().rows.map((r) => r.original.id)
+                                await deleteNotificationById(ids)
+                                table.resetRowSelection();
+                            }
+                        }}
                     >
                         <Trash2 className="size-4 mr-2" />
                         Delete ({table.getFilteredSelectedRowModel().rows.length})
