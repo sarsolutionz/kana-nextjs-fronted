@@ -114,6 +114,14 @@ export const vehicleApi = apiSlice.injectEndpoints({
       },
       providesTags: ["Notfication"],
     }),
+    getNotificationById: builder.query({
+      query: (id) => ({
+        url: `member/get-notification?notification_id=${id}`,
+        method: "GET",
+        credentials: "include" as const,
+      }),
+      providesTags: ["Notfication"],
+    }),
   }),
 });
 
@@ -129,4 +137,5 @@ export const {
   useDeleteVehicleByIdMutation,
   useEditNotificationByIdMutation,
   useGetAllNotificationByFilterQuery,
+  useGetNotificationByIdQuery,
 } = vehicleApi;

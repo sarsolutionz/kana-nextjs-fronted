@@ -6,6 +6,7 @@ import { CreateTeamModal } from "@/features/teams/components/create-team-modal";
 import { EditPartnerModal } from "@/features/partners/components/edit-partner-modal";
 import { CreatePartnerModal } from "@/features/partners/components/create-partner-modal";
 import { CreateNotificationModal } from "@/features/members/components/create-notification-modal";
+import { EditNotificationModal } from "@/features/partners/components/edit-notification-modal";
 
 import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
 
@@ -46,6 +47,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <EditTeamModal />
       <EditPartnerModal />
       <CreateNotificationModal />
+      <EditNotificationModal />
       <AdminPanelLayout>
         {children}
       </AdminPanelLayout>
