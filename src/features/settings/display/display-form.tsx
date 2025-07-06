@@ -50,10 +50,10 @@ const items = [
         id: "appearance",
         label: "Appearance",
     },
-    {
-        id: "notifications",
-        label: "Notifications",
-    },
+    // {
+    //     id: "notifications",
+    //     label: "Notifications",
+    // },
     {
         id: "display",
         label: "Display",

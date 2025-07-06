@@ -116,11 +116,11 @@ export function GetMenuList(pathname: string): Group[] {
               label: "Appearance",
               icon: Palette,
             },
-            {
-              href: "/settings/notifications",
-              label: "Notifications",
-              icon: BellRing,
-            },
+            // {
+            //   href: "/settings/notifications",
+            //   label: "Notifications",
+            //   icon: BellRing,
+            // },
             {
               href: "/settings/display",
               label: "Display",
