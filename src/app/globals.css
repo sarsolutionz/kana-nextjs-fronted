@@ -9,7 +9,7 @@ body,
 }
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-current);
 }
 
 @layer utilities {
@@ -20,6 +20,7 @@ body {
 
 @layer base {
   :root {
+    --font-current: var(--font-geist-sans);
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -80,6 +81,32 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+   /* Font utility classes */
+  .font-inter {
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .font-roboto {
+    font-family: var(--font-roboto), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .font-open-sans {
+    font-family: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .font-poppins {
+    font-family: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .font-lato {
+    font-family: var(--font-lato), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .font-geist-sans {
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
 }
 
 @layer base {

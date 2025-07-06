@@ -1,6 +1,5 @@
 import { apiSlice } from "../api/apiSlice";
 import { setMember, unSetMember } from "./authSlice";
-import { setMemberInfo } from "./memberSlice";
 
 export const authApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
@@ -66,30 +65,13 @@ export const authApi = apiSlice.injectEndpoints({
                 }
             }
         }),
-        getMemberInfo: builder.mutation({
-            query: (access_token) => ({
+        getMemberInfo: builder.query({
+            query: () => ({
                 url: "user/profile",
                 method: "GET",
                 credentials: "include" as const,
-                headers: {
-                    'Authorization': `Bearer ${access_token}`,
-                }
             }),
-            invalidatesTags: ["user"],
-            async onQueryStarted(arg, { queryFulfilled, dispatch }) {
-                try {
-                    const result = await queryFulfilled;
-                    dispatch(
-                        setMemberInfo({
-                            email: result.data.email,
-                            name: result.data.name,
-                        })
-                    )
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                } catch (error: any) {
-                    console.log(error)
-                }
-            }
+            providesTags: ["user"],
         }),
         deleteDriverById: builder.mutation({
             query: (id) => ({
@@ -99,7 +81,16 @@ export const authApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["user"],
         }),
+        updatePassword: builder.mutation({
+            query: (data) => ({
+                url: "user/changepassword/",
+                method: "POST",
+                body: data,
+                credentials: "include" as const,
+            }),
+            invalidatesTags: ["user"],
+        }),
     }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useSignOutMutation, useGetMemberInfoMutation, useDeleteDriverByIdMutation } = authApi;
+export const { useSignUpMutation, useSignInMutation, useSignOutMutation, useGetMemberInfoQuery, useDeleteDriverByIdMutation, useUpdatePasswordMutation } = authApi;

@@ -130,6 +130,23 @@ export const vehicleApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Notfication"],
     }),
+    createDisplay: builder.mutation({
+      query: (data) => ({
+        url: "member/create-display/",
+        method: "POST",
+        body: data,
+        credentials: "include" as const,
+      }),
+      invalidatesTags: ["Notfication"],
+    }),
+    getDisplayUrl: builder.query({
+      query: (paramsObj: { role: string }) => ({
+        url: `member/get-display/?role=${paramsObj.role}`,
+        method: "GET",
+        credentials: "include" as const,
+      }),
+      providesTags: ["Notfication"],
+    }),
   }),
 });
 
@@ -147,4 +164,6 @@ export const {
   useGetAllNotificationByFilterQuery,
   useGetNotificationByIdQuery,
   useDeleteNotificationByIdMutation,
+  useCreateDisplayMutation,
+  useGetDisplayUrlQuery,
 } = vehicleApi;

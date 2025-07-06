@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { LayoutGrid, LogOut, User, Loader } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -29,13 +29,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
 import {
-  useGetMemberInfoMutation,
+  useGetMemberInfoQuery,
   useSignOutMutation,
 } from "@/redux/features/auth/authApi";
 
 import { RootState } from "@/redux/store";
 import { unSetMember } from "@/redux/features/auth/authSlice";
-import { setMemberInfo, unsetMemberInfo } from "@/redux/features/auth/memberSlice";
+import { unsetMemberInfo } from "@/redux/features/auth/memberSlice";
 
 export function UserNav() {
   const router = useRouter();
@@ -44,13 +44,18 @@ export function UserNav() {
   const access_token = useSelector(
     (state: RootState) => state.auth.access_token?.access
   );
-  const memberInfo = useSelector((state: RootState) => state.user);
-
-  const [isFetched, setIsFetched] = useState(false);
 
   const [signOut, { isLoading: isSignOutLoading }] = useSignOutMutation();
-  const [getMemberInfo, { isLoading: isMemberLoading }] =
-    useGetMemberInfoMutation();
+
+  const { data, isLoading: isMemberLoading, refetch } = useGetMemberInfoQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  useEffect(() => {
+    if (data) {
+      refetch();
+    }
+  }, [data, refetch]);
 
     const tokenExpiration = useMemo(() => {
       if (!access_token) return null;
@@ -77,22 +82,6 @@ export function UserNav() {
       }
     }, [tokenExpiration]);
 
-   const fetchMemberInfo = async () => {
-    if (!access_token || isFetched) return;
-
-    try {
-      const response = await getMemberInfo(access_token).unwrap();
-      if (!response?.email || !response?.name) {
-        throw new Error("Invalid session. Please log in again.");
-      }
-      dispatch(setMemberInfo(response)); // Update Redux state
-      setIsFetched(true); // Mark as fetched
-    } catch {
-      toast.error("Session expired. Please log in again.");
-      handleLogout(); 
-    }
-  };
-
   const handleLogout = async () => {
     try {
       if (access_token) {
@@ -112,10 +101,6 @@ export function UserNav() {
     toast.success("Log out successfully");
   };
 
-  useEffect(() => {
-    fetchMemberInfo();
-  }, [access_token]);
-
   const isLoading = isSignOutLoading || isMemberLoading;
 
   if (isLoading) {
@@ -126,13 +111,9 @@ export function UserNav() {
     );
   }
 
-  if (!memberInfo.email) {
-    return null;
-  }
-
-  const avatarFallback = memberInfo?.name
-    ? memberInfo?.name.charAt(0).toUpperCase()
-    : memberInfo?.email.charAt(0).toUpperCase() ?? "U";
+  const avatarFallback = data?.name
+    ? data?.name.charAt(0).toUpperCase()
+    : data?.email.charAt(0).toUpperCase() ?? "U";
 
   return (
     <DropdownMenu>
@@ -158,9 +139,9 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{memberInfo.name || "John Doe"}</p>
+            <p className="text-sm font-medium leading-none">{data?.name || "John Doe"}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {memberInfo.email || "johndoe@example.com"}
+              {data?.email || "johndoe@example.com"}
             </p>
           </div>
         </DropdownMenuLabel>

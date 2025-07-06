@@ -8,9 +8,10 @@ import { Providers } from "./Provider";
 import { Toaster } from "@/components/ui/sonner";
 import { SheetProvider } from "@/providers/sheet-provider";
 
+import { FontProvider } from "@/context/font-context";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
-import { GeistSans } from "geist/font/sans";
+import { fontConfig } from "@/lib/fonts"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,18 +23,24 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const fontVariables = Object.values(fontConfig)
+    .map((config) => config.font.variable)
+    .join(" ");
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${GeistSans.className}`}>
+    <html lang="en" suppressHydrationWarning className={`${fontVariables} font-inter`}>
+      <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <JotaiProvider>
-            <Providers>
-              <SheetProvider />
-              <Toaster />
-              <Modals />
-              {children}
-            </Providers>
-          </JotaiProvider>
+          <FontProvider>
+            <JotaiProvider>
+              <Providers>
+                <SheetProvider />
+                <Toaster />
+                <Modals />
+                {children}
+              </Providers>
+            </JotaiProvider>
+          </FontProvider>
         </ThemeProvider>
       </body>
     </html>

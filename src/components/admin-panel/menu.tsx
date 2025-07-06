@@ -10,7 +10,7 @@ import { useEffect, useMemo } from "react";
 import { Loader, Ellipsis, LogOut } from "lucide-react";
 
 
-import { getMenuList } from "@/lib/menu-list";
+import { GetMenuList } from "@/lib/menu-list";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -37,8 +37,8 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
-  const menuList = getMenuList(pathname);
-
+  const menuList = GetMenuList(pathname);
+  
   const router = useRouter();
   const dispatch = useDispatch();
 
