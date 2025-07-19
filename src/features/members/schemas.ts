@@ -49,3 +49,9 @@ export const createNotificationApiSchema = z.object({
     message: z.string(),
     contact: z.string(),
 })
+
+export const DocumentsFormSchema = z.object({
+    items: z.array(z.string()).refine((value) => value.some((item) => item), {
+        message: "You have to select at least one document.",
+    }),
+}) 

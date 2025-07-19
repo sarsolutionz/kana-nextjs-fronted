@@ -1,3 +1,5 @@
+import { VehicleData } from "../members/types";
+
 export enum NotificationStatus {
     IN_PROGRESS = "IN_PROGRESS",
     DONE = "DONE",
@@ -8,6 +10,7 @@ export type Notification = {
     id: string,
     source: string,
     destination: string,
+    vehicle: VehicleData,
     rate: number,
     weight: number,
     message: string,

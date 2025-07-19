@@ -109,12 +109,6 @@ const MemberIdPage = () => {
             />
           </div>
         )}
-        {/* <Button variant="outline" size="sm" className="absolute top-16 left-72">
-          <Link href="/members" className="flex items-center space-x-2">
-            <MoveLeftIcon className="size-5 text-muted-foreground" />{" "}
-            <span>Back</span>
-          </Link>
-        </Button> */}
         <h1 className="text-5xl font-semibold">Driver Document Vault</h1>
         <p className="text-muted-foreground">
           Securely upload and manage all driver-related documents in one place.

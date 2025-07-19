@@ -147,6 +147,17 @@ export const vehicleApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["Notfication"],
     }),
+    verifyDocument: builder.mutation({
+      query: ({ id, image_ids }) => ({
+        url: `member/verify-documents?vehicle_id=${id}`,
+        method: "POST",
+        body: {
+          image_ids: image_ids,
+        },
+        credentials: "include" as const,
+      }),
+      invalidatesTags: ["VehicleDocs"],
+    }),
   }),
 });
 
@@ -166,4 +177,5 @@ export const {
   useDeleteNotificationByIdMutation,
   useCreateDisplayMutation,
   useGetDisplayUrlQuery,
+  useVerifyDocumentMutation,
 } = vehicleApi;

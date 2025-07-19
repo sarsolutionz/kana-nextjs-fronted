@@ -95,7 +95,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                 className="max-w-sm"
               />
               <Input
-                placeholder={`Filter by ${"model"}...`}
+                placeholder={`Filter by ${"vehicel type"}...`}
                 value={
                   (table.getColumn("model")?.getFilterValue() as string) ?? ""
                 }

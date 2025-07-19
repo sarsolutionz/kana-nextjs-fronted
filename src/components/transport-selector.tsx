@@ -28,12 +28,12 @@ const transportOptions = [
     label: "Box",
   },
   {
-    value: "house equipment",
-    label: "House Equipment",
+    value: "bags",
+    label: "Bags",
   },
   {
-    value: "hazardous",
-    label: "Hazardous Materials",
+    value: "wooden box",
+    label: "Wooden Box",
   },
   {
     value: "oversized",

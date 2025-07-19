@@ -52,6 +52,7 @@ export function GetMenuList(pathname: string): Group[] {
     role: getRole?.role,
   }, {
     refetchOnMountOrArgChange: true,
+    skip: !getRole?.role,  // Skip query until role exists
   });
 
   useEffect(() => {

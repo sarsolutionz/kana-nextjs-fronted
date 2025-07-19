@@ -83,7 +83,7 @@ export const CreateNotificationForm = ({
     <Card className="w-full h-full border-none shadow-none">
       <CardHeader className="flex p-7">
         <CardTitle className="text-xl font-bold">
-          Create a notification
+          Create a load
         </CardTitle>
       </CardHeader>
       <div className="px-7">
@@ -243,7 +243,7 @@ export const CreateNotificationForm = ({
                 Cancel
               </Button>
               <Button type="submit" size="lg" disabled={isLoading}>
-                create notification
+                send load
               </Button>
             </div>
           </form>

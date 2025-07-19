@@ -44,7 +44,7 @@ const StateCitySelector = React.forwardRef<
     () => State.getStatesOfCountry(countryCode),
     [countryCode]
   );
-  const [currentStateName, currentCity] = React.useMemo(
+  const [currentCity, currentStateName] = React.useMemo(
     () => (value?.includes(", ") ? value.split(", ") : ["", value || ""]),
     [value]
   );
@@ -116,7 +116,7 @@ const StateCitySelector = React.forwardRef<
         if (state) {
           setCurrentView("states");
           setSearchTerm(state.name);
-          onChange?.(`${state.name}, ${cityName}`);
+          onChange?.(`${cityName}, ${state.name}`);
         }
       }
     },
@@ -125,7 +125,7 @@ const StateCitySelector = React.forwardRef<
 
   const handleStateSelect = React.useCallback(
     (stateName: string) => {
-      onChange?.(`${stateName}, ${currentCity}`);
+      onChange?.(`${currentCity}, ${stateName}`);
       setOpen(false);
     },
     [currentCity, onChange]

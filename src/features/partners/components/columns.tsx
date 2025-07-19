@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpDown, MoreVertical } from "lucide-react";
+import { ArrowUpDown, Minus, MoreVertical } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { IconCircleCheckFilled, IconLoader, IconX } from "@tabler/icons-react";
 
@@ -72,6 +72,60 @@ export const columns: ColumnDef<Notification>[] = [
         cell: ({ row }) => {
             const destination = row.original.destination;
             return <span className="line-clamp-1 ml-2">{destination}</span>;
+        },
+    },
+        {
+        accessorKey: "vehicle",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    D_Name
+                    <ArrowUpDown className="ml-2 size-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => {
+            const driver_name = row.original?.vehicle?.name || <Minus />;
+            return <span className="line-clamp-1 ml-4">{driver_name}</span>;
+        },
+    },
+    {
+        accessorKey: "vehicle",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    D_Number
+                    <ArrowUpDown className="ml-2 size-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => {
+            const driver_number = row.original?.vehicle?.alternate_number || <Minus />;
+            return <span className="line-clamp-1 ml-4">{driver_number}</span>;
+        },
+    },
+    {
+        accessorKey: "vehicle",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    V_Model
+                    <ArrowUpDown className="ml-2 size-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => {
+            const vehicle_model = row.original?.vehicle?.model || <Minus />;
+            return <span className="line-clamp-1 ml-4">{vehicle_model}</span>;
         },
     },
     {

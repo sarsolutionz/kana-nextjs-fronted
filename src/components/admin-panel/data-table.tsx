@@ -234,6 +234,33 @@ const columns: ColumnDef<z.infer<typeof dashboardFormSchema>>[] = [
     ),
   },
   {
+    accessorKey: "driver_name",
+    header: "D_Name",
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
+        {row.original.driver_name}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "driver_number",
+    header: "D_Number",
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
+        {row.original.driver_number}
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "vehicle_model",
+    header: "V_Modal",
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
+        {row.original.vehicle_model}
+      </Badge>
+    ),
+  },
+  {
     accessorKey: "rate",
     header: () => <div className="w-full text-left">Rate</div>,
     cell: ({ row }) => (
@@ -255,20 +282,20 @@ const columns: ColumnDef<z.infer<typeof dashboardFormSchema>>[] = [
     accessorKey: "message",
     header: "Message",
     cell: ({ row }) => (
-      <Badge variant="outline" className="text-muted-foreground px-1.5 truncate max-w-[200px]">
+      <Badge variant="outline" className="text-muted-foreground px-1.5 truncate max-w-[100px]">
         {row.original.message}
       </Badge>
     ),
   },
-  {
-    accessorKey: "contact",
-    header: "Contact",
-    cell: ({ row }) => (
-      <Badge variant="outline" className="text-muted-foreground px-1.5">
-        {row.original.contact ? row.original.contact : "Not Found"}
-      </Badge>
-    ),
-  },
+  // {
+  //   accessorKey: "contact",
+  //   header: "Contact",
+  //   cell: ({ row }) => (
+  //     <Badge variant="outline" className="text-muted-foreground px-1.5">
+  //       {row.original.contact ? row.original.contact : "Not Found"}
+  //     </Badge>
+  //   ),
+  // },
   {
     accessorKey: "date",
     header: "Date",
