@@ -59,7 +59,7 @@ interface TestimonialSliderCardProps {
   refetch: () => void;
 }
 
-const documentTypes = ["Aadhaar Card", "Pan Card", "PUC", "Driving License", "RC", "Insurance"];
+const documentTypes = ["Aadhaar Card", "Pan Card", "Bank Detail", "Driving License", "RC", "Insurance"];
 
 export const TestimonialSliderCard = ({
   testimonials,

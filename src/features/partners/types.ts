@@ -8,6 +8,7 @@ export enum NotificationStatus {
 
 export type Notification = {
     id: string,
+    created_by?: Creators,
     source: string,
     destination: string,
     vehicle: VehicleData,

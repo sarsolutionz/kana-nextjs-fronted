@@ -2,10 +2,12 @@ import * as z from "zod";
 
 export const dashboardFormSchema = z.object({
   id: z.string(),
+  created_by: z.string().optional(),
   source: z.string(),
   destination: z.string(),
   vehicle_model: z.string().optional(),
   driver_number: z.string().optional(),
+  vehicle_number: z.string().optional(),
   driver_name: z.string().optional(),
   rate: z.number(),
   weight: z.number(),

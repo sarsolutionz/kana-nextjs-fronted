@@ -39,6 +39,24 @@ export const columns: ColumnDef<Notification>[] = [
         enableHiding: false,
     },
     {
+        accessorKey: "created_by",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Load_created
+                    <ArrowUpDown className="size-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => {
+            const created_by = row.original?.created_by?.name || <Minus />;
+            return <span className="line-clamp-1 ml-4">{created_by}</span>;
+        },
+    },
+    {
         accessorKey: "source",
         header: ({ column }) => {
             return (
@@ -74,7 +92,7 @@ export const columns: ColumnDef<Notification>[] = [
             return <span className="line-clamp-1 ml-2">{destination}</span>;
         },
     },
-        {
+    {
         accessorKey: "vehicle",
         header: ({ column }) => {
             return (
@@ -82,7 +100,7 @@ export const columns: ColumnDef<Notification>[] = [
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    D_Name
+                    Driver_Name
                     <ArrowUpDown className="ml-2 size-4" />
                 </Button>
             );
@@ -100,7 +118,7 @@ export const columns: ColumnDef<Notification>[] = [
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    D_Number
+                    Driver_Number
                     <ArrowUpDown className="ml-2 size-4" />
                 </Button>
             );
@@ -108,6 +126,24 @@ export const columns: ColumnDef<Notification>[] = [
         cell: ({ row }) => {
             const driver_number = row.original?.vehicle?.alternate_number || <Minus />;
             return <span className="line-clamp-1 ml-4">{driver_number}</span>;
+        },
+    },
+    {
+        accessorKey: "vehicle",
+        header: ({ column }) => {
+            return (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Vehicle_Number
+                    <ArrowUpDown className="ml-2 size-4" />
+                </Button>
+            );
+        },
+        cell: ({ row }) => {
+            const vehicle_number = row.original?.vehicle?.vehicle_number || <Minus />;
+            return <span className="line-clamp-1 ml-4">{vehicle_number}</span>;
         },
     },
     {
@@ -177,7 +213,7 @@ export const columns: ColumnDef<Notification>[] = [
         },
         cell: ({ row }) => {
             const rate = row.original.rate;
-            return <span className="line-clamp-1 ml-2">{rate}</span>;
+            return <span className="line-clamp-1 ml-4">{rate}</span>;
         },
     },
     {
@@ -195,7 +231,7 @@ export const columns: ColumnDef<Notification>[] = [
         },
         cell: ({ row }) => {
             const weight = row.original.weight;
-            return <span className="line-clamp-1 ml-2">{weight}</span>;
+            return <span className="line-clamp-1 ml-4">{weight}</span>;
         },
     },
     {

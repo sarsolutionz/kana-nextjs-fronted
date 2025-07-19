@@ -201,6 +201,16 @@ const columns: ColumnDef<z.infer<typeof dashboardFormSchema>>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "created_by",
+    header: "Load_created",
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground px-1.5 capitalize">
+        {row.original.created_by}
+      </Badge>
+    ),
+    enableHiding: false,
+  },
+  {
     accessorKey: "source",
     header: "Source",
     cell: ({ row }) => (
@@ -235,7 +245,7 @@ const columns: ColumnDef<z.infer<typeof dashboardFormSchema>>[] = [
   },
   {
     accessorKey: "driver_name",
-    header: "D_Name",
+    header: "Driver Name",
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.driver_name}
@@ -244,7 +254,7 @@ const columns: ColumnDef<z.infer<typeof dashboardFormSchema>>[] = [
   },
   {
     accessorKey: "driver_number",
-    header: "D_Number",
+    header: "Driver Number",
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.driver_number}
@@ -252,8 +262,17 @@ const columns: ColumnDef<z.infer<typeof dashboardFormSchema>>[] = [
     ),
   },
   {
+    accessorKey: "vehicle_number",
+    header: "Vehicle Number",
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground px-1.5">
+        {row.original.vehicle_number}
+      </Badge>
+    ),
+  },
+  {
     accessorKey: "vehicle_model",
-    header: "V_Modal",
+    header: "Vehicle Modal",
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.vehicle_model}
