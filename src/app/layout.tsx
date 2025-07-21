@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { SheetProvider } from "@/providers/sheet-provider";
 
 import { FontProvider } from "@/context/font-context";
+import { RouteGuard } from "@/components/RouteGuard";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 
 import { fontConfig } from "@/lib/fonts"
@@ -37,7 +38,9 @@ export default function RootLayout({
                 <SheetProvider />
                 <Toaster />
                 <Modals />
-                {children}
+                <RouteGuard>
+                  {children}
+                </RouteGuard>
               </Providers>
             </JotaiProvider>
           </FontProvider>

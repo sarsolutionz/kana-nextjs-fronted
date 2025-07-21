@@ -37,12 +37,10 @@ export default function DashboardPage() {
   const summary = useGetSummary();
   const notifications = summary?.notifications;
   const isSuccess = summary?.isSuccess;
-  console.log(notifications);
-  
 
   useEffect(() => {
     if (isSuccess) {
-     summary.refetch();
+      summary.refetch();
     }
   }, [isSuccess, summary?.refetch]);
 

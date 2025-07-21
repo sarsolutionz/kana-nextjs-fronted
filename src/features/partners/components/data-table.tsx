@@ -54,8 +54,6 @@ export function DataTable<TData extends { id: string | number }, TValue>({
 
     const [deleteNotificationById, { isLoading, isSuccess, data: deleteData }] =
         useDeleteNotificationByIdMutation();
-    console.log(data);
-    
 
     const status = deleteData?.status ?? undefined
     const message = deleteData?.message ?? undefined
