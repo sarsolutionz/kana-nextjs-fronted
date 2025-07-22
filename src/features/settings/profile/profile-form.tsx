@@ -16,9 +16,9 @@ import {
 
 import { ProfileData } from "../types";
 import { profileFormSchema } from "../schemas";
-import { useEditUserByIdMutation } from "@/redux/features/team/teamApi";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import { useEditProfileByIdMutation } from "@/redux/features/auth/authApi";
 
 interface ProfileFormProps {
     id: string;
@@ -45,9 +45,9 @@ export const ProfileForm = ({
     });
 
     const [
-        editUserById,
+        editProfileById,
         { isLoading: editIsLoading, data: editData },
-    ] = useEditUserByIdMutation();
+    ] = useEditProfileByIdMutation();
 
     const isLoading = getIsLoading || editIsLoading;
     const status = editData?.status ?? undefined
@@ -67,7 +67,7 @@ export const ProfileForm = ({
         if (values.is_admin) {
             delete values.is_active;
         }
-        await editUserById({ id, data: values });
+        await editProfileById({ id, data: values });
     };
 
     return (

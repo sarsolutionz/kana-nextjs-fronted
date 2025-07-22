@@ -90,7 +90,15 @@ export const authApi = apiSlice.injectEndpoints({
             }),
             invalidatesTags: ["user"],
         }),
+        editProfileById: builder.mutation({
+            query: ({ id, data }) => ({
+                url: `user/profile-edit?profile_id=${id}`,
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["user"],
+        }),
     }),
 });
 
-export const { useSignUpMutation, useSignInMutation, useSignOutMutation, useGetMemberInfoQuery, useDeleteDriverByIdMutation, useUpdatePasswordMutation } = authApi;
+export const { useSignUpMutation, useSignInMutation, useSignOutMutation, useGetMemberInfoQuery, useDeleteDriverByIdMutation, useUpdatePasswordMutation, useEditProfileByIdMutation } = authApi;
