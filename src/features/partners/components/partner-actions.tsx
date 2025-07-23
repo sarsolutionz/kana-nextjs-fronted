@@ -31,7 +31,7 @@ export const PartnerActions = ({ id, children }: PartnerActionsProps) => {
         "Are you sure you want to delete this partner? This action cannot be undone.",
     );
 
-    const [deletePartnerById, { isLoading, isSuccess, data }] =
+    const [deletePartnerById, { isLoading, isSuccess, data, error }] =
         useDeletePartnerByIdMutation();
 
     const status = data?.status ?? undefined
@@ -45,7 +45,12 @@ export const PartnerActions = ({ id, children }: PartnerActionsProps) => {
         if (status === 400) {
             toast.error(message);
         };
-    }, [message, status, isSuccess, router]);
+        if (error && 'status' in error) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const errorData = (error.data as any)?.detail;
+            toast.error(errorData);
+        }
+    }, [message, status, isSuccess, router, error]);
 
     const onDelete = async () => {
         const ok = await confirm();

@@ -14,6 +14,7 @@ import { useConfirm } from "@/hooks/use-confirm";
 import { useDeleteDriverByIdMutation } from "@/redux/features/auth/authApi";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface ActionsProps {
   id: string;
@@ -29,14 +30,19 @@ export const Actions = ({ id }: ActionsProps) => {
   );
 
   // , refetch, isLoading, error
-  const [deleteDriverById, { isLoading, isSuccess }] =
+  const [deleteDriverById, { isLoading, isSuccess, error }] =
     useDeleteDriverByIdMutation();
 
   useEffect(() => {
     if (isSuccess) {
       router.refresh();
     }
-  }, [isSuccess, router]);
+    if (error && 'status' in error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorData = (error.data as any)?.detail;
+      toast.error(errorData);
+    }
+  }, [isSuccess, router, error]);
 
   const handleDelete = async () => {
     const ok = await confirm();

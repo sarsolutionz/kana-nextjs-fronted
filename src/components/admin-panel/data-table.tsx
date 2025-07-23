@@ -3,6 +3,12 @@
 
 import { z } from "zod";
 import * as React from "react";
+import { toast } from "sonner";
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useConfirm } from "@/hooks/use-confirm";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   closestCenter,
@@ -54,6 +60,7 @@ import {
 } from "@tanstack/react-table";
 
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useGetSummary } from "@/hooks/use-get-summary";
 
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -98,16 +105,20 @@ import {
   TabsList,
   TabsTrigger
 } from "@/components/ui/tabs";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from "@/components/ui/form";
 
 import { dashboardFormSchema } from "@/features/dashboard/schemas";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+
 import { DatePicker } from "../date-picker";
-import { useEditNotificationByIdMutation } from "@/redux/features/vehicle/vehicleApi";
-import { useGetSummary } from "@/hooks/use-get-summary";
-import { format } from "date-fns";
-import { toast } from "sonner";
+
+import { useDeleteNotificationByIdMutation, useEditNotificationByIdMutation } from "@/redux/features/vehicle/vehicleApi";
 
 // Create a separate component for the drag handle
 function DragHandle({ id }: { id: string }) {
@@ -130,7 +141,40 @@ function DragHandle({ id }: { id: string }) {
 }
 
 const Actions = ({ item }: { item: z.infer<typeof dashboardFormSchema> }) => {
+  const router = useRouter();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const [ConfirmDialog, confirm] = useConfirm(
+    "Delete Notification",
+    "Are you sure you want to delete this notification? This action cannot be undone.",
+  );
+
+  const [deleteNotificationById, { isLoading, isSuccess, data, error }] =
+    useDeleteNotificationByIdMutation();
+
+  const status = data?.status ?? undefined
+  const message = data?.message ?? undefined
+
+  React.useEffect(() => {
+    if (isSuccess && status === 200) {
+      toast.success(message);
+      router.refresh();
+    }
+    if (status === 400) {
+      toast.error(message);
+    };
+    if (error && 'status' in error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorData = (error.data as any)?.errors?.detail;
+      toast.error(errorData);
+    }
+  }, [message, status, isSuccess, router, error]);
+
+  const onDelete = async () => {
+    const ok = await confirm();
+    if (!ok) return;
+    await deleteNotificationById(item.id);
+  };
 
   if (drawerOpen) {
     return (
@@ -143,28 +187,33 @@ const Actions = ({ item }: { item: z.infer<typeof dashboardFormSchema> }) => {
   };
 
   return (
-    <DropdownMenu modal={false}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-          size="icon"
-        >
-          <IconDotsVertical />
-          <span className="sr-only">Open menu</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-32">
-        <DropdownMenuItem onClick={() => setDrawerOpen(true)}>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
-        <DropdownMenuSeparator />
+    <>
+      <ConfirmDialog />
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+            size="icon"
+          >
+            <IconDotsVertical />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuItem onClick={() => setDrawerOpen(true)}>Edit</DropdownMenuItem>
+          <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="text-destructive focus:bg-rose-100 dark:focus:bg-destructive/30 focus:text-red-600">
-          Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <DropdownMenuItem
+            disabled={isLoading}
+            onClick={onDelete}
+            className="text-amber-700 focus:text-amber-700 font-medium"
+          >
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   )
 }
 
@@ -688,6 +737,12 @@ function TableCellViewer({ item, drawerOpen, setDrawerOpen }: TableCellViewerPro
       summary?.refetch();
       toast.success("Notification updated successfully.");
       setDrawerOpen(false);
+    }
+    if (error && 'status' in error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorData = (error.data as any)?.errors?.detail;
+      setDrawerOpen(false);
+      toast.error(errorData);
     }
   }, [isSuccess, error, form, summary?.refetch, data]);
 

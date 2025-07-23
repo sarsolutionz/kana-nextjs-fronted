@@ -133,7 +133,10 @@ export const TestimonialSliderCard = ({
       if ("data" in error) {
         const errorData = error as { data?: { errors?: { error?: string } } };
         const errorMessage =
-          errorData?.data?.errors?.error || "Something went wrong";
+          errorData?.data?.errors?.error
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          || (error.data as any)?.errors?.detail
+          || "Something went wrong";
         toast.error(errorMessage);
       }
     }

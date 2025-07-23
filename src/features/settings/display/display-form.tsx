@@ -15,12 +15,12 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { 
-    Select, 
-    SelectItem, 
-    SelectValue, 
-    SelectContent, 
-    SelectTrigger, 
+import {
+    Select,
+    SelectItem,
+    SelectValue,
+    SelectContent,
+    SelectTrigger,
 } from "@/components/ui/select";
 
 import { items } from "../types"
@@ -46,7 +46,7 @@ export const DisplayForm = () => {
         mode: "onChange",
     });
 
-    const [createDisplay, { isLoading, data }] = useCreateDisplayMutation();
+    const [createDisplay, { isLoading, data, error }] = useCreateDisplayMutation();
 
     const status = data?.status ?? undefined;
     const message = data?.message ?? undefined;
@@ -59,7 +59,12 @@ export const DisplayForm = () => {
         if (status === 400) {
             toast.error(message)
         }
-    }, [message, status, form]);
+        if (error && 'status' in error) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const errorData = (error.data as any)?.detail;
+            toast.error(errorData);
+        }
+    }, [message, status, form, error]);
 
     const onSubmit = async (values: z.infer<typeof displayFormSchema>) => {
         const ok = await confirm();

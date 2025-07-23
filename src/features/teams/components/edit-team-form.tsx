@@ -64,7 +64,7 @@ export const EditTeamForm = ({
   ] = useEditUserByIdMutation();
 
   const error = userError || editError;
-  const isLoading = userLoading || editIsLoading;
+  const isLoading = userLoading || editIsLoading;  
 
   useEffect(() => {
     if (editIsSuccess) {
@@ -74,7 +74,10 @@ export const EditTeamForm = ({
     }
     form.reset(initialValues);
     if (error && "data" in error) {
-      toast.error("Something went wrong");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorData = (error.data as any)?.detail || "Something went wrong";
+      onCancel?.();
+      toast.error(errorData);
     }
   }, [editIsSuccess, form, onCancel, error, initialValues]);
 

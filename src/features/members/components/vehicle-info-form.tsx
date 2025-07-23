@@ -79,7 +79,9 @@ export const VehicleInfoForm = ({
       if ("data" in error) {
         const errorData = error as any;
         const errorMessage =
-          errorData?.data?.errors?.error || "Something went wrong";
+          errorData?.data?.errors?.error 
+          || (error.data as any)?.errors?.detail
+          || "Something went wrong";
         toast.error(errorMessage);
       }
     }

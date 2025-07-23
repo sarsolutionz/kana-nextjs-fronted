@@ -14,7 +14,8 @@ export function RouteGuard({ children }: { children: React.ReactNode }) {
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
-        if (['/', '/sign-in', '/sign-up', '/unauthorized'].includes(pathname)) {
+        if (['/', '/sign-in', '/sign-up', '/unauthorized'].includes(pathname)
+            || pathname.startsWith('/members/')) {
             setIsChecking(false);
             return;
         }

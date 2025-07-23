@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { BellPlus, Edit, FileUp, MoreHorizontal, Trash2 } from "lucide-react";
@@ -36,14 +37,19 @@ export const Actions = ({ id }: ActionsProps) => {
     "Are you sure you want to delete this vehicle?"
   );
 
-  const [deleteVehicleById, { isLoading, isSuccess }] =
+  const [deleteVehicleById, { isLoading, isSuccess, error }] =
     useDeleteVehicleByIdMutation();
 
   useEffect(() => {
     if (isSuccess) {
       router.refresh();
     }
-  }, [isSuccess, router]);
+    if (error && 'status' in error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorData = (error.data as any)?.detail;
+      toast.error(errorData);
+    }
+  }, [isSuccess, router, error]);
 
   const handleDelete = async () => {
     const ok = await confirm();
