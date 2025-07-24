@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 
 import {
+  authApi,
   useGetMemberInfoQuery,
   useSignOutMutation,
 } from "@/redux/features/auth/authApi";
@@ -47,7 +48,9 @@ export function UserNav() {
 
   const [signOut, { isLoading: isSignOutLoading }] = useSignOutMutation();
 
+  const isAuthenticated = Boolean(access_token);
   const { data, isLoading: isMemberLoading, refetch } = useGetMemberInfoQuery(undefined, {
+    skip: !isAuthenticated,
     refetchOnMountOrArgChange: true,
   });
 
@@ -57,32 +60,36 @@ export function UserNav() {
     }
   }, [data, refetch]);
 
-    const tokenExpiration = useMemo(() => {
-      if (!access_token) return null;
-      try {
-        const decoded: JwtPayload = jwtDecode(access_token);
-        return decoded.exp ? decoded.exp * 1000 : null; // Convert to milliseconds
-      } catch {
-        return null;
-      }
-    }, [access_token]);
+  const tokenExpiration = useMemo(() => {
+    if (!access_token) return null;
+    try {
+      const decoded: JwtPayload = jwtDecode(access_token);
+      return decoded.exp ? decoded.exp * 1000 : null; // Convert to milliseconds
+    } catch {
+      return null;
+    }
+  }, [access_token]);
 
-    useEffect(() => {
-      if (!tokenExpiration) return;
-  
-      const timeLeft = tokenExpiration - Date.now();
-      if (timeLeft <= 0) {
+  useEffect(() => {
+    if (!tokenExpiration) return;
+
+    const timeLeft = tokenExpiration - Date.now();
+    if (timeLeft <= 0) {
+      handleLogout();
+    } else {
+      const timeout = setTimeout(() => {
         handleLogout();
-      } else {
-        const timeout = setTimeout(() => {
-          handleLogout();
-        }, timeLeft);
-  
-        return () => clearTimeout(timeout); // Cleanup timer
-      }
-    }, [tokenExpiration]);
+      }, timeLeft);
+
+      return () => clearTimeout(timeout); // Cleanup timer
+    }
+  }, [tokenExpiration]);
 
   const handleLogout = async () => {
+    dispatch(unSetMember());
+    dispatch(unsetMemberInfo({ email: "", name: "" }));
+    await dispatch(authApi.util.resetApiState());
+
     try {
       if (access_token) {
         await signOut(access_token);
@@ -90,13 +97,7 @@ export function UserNav() {
     } catch (error) {
       console.error("Failed to log out:", error);
     }
-    dispatch(unSetMember()); 
-    dispatch(
-      unsetMemberInfo({
-        email: "",
-        name: "",
-      })
-    );
+
     router.push("/sign-in");
     toast.success("Log out successfully");
   };

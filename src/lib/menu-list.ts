@@ -38,28 +38,16 @@ type Group = {
 };
 
 export function GetMenuList(pathname: string): Group[] {
-  const { data: getRole, refetch } = useGetMemberInfoQuery(undefined, {
+  const { data: getRole } = useGetMemberInfoQuery(undefined, {
     refetchOnMountOrArgChange: true,
-  })
+  });
 
-  useEffect(() => {
-    if (getRole) {
-      refetch();
-    }
-  }, [getRole, refetch]);
-
-  const { data: getDisplay, refetch: refetchDisplay } = useGetDisplayUrlQuery({
+  const { data: getDisplay } = useGetDisplayUrlQuery({
     role: getRole?.role,
   }, {
     refetchOnMountOrArgChange: true,
     skip: !getRole?.role,  // Skip query until role exists
   });
-
-  useEffect(() => {
-    if (getDisplay) {
-      refetchDisplay();
-    }
-  }, [getDisplay, refetchDisplay]);
 
   const availableItems = getDisplay?.data[0]?.items || [];
 

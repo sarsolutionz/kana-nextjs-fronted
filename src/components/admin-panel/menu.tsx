@@ -5,7 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { Loader, Ellipsis, LogOut } from "lucide-react";
 
@@ -36,6 +36,9 @@ interface MenuProps {
 }
 
 export function Menu({ isOpen }: MenuProps) {
+  const user = useSelector((state: RootState) => state.auth.user);
+  if (!user) redirect("/sign-in");
+
   const pathname = usePathname();
   const menuList = GetMenuList(pathname);
   
