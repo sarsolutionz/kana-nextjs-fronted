@@ -37,7 +37,9 @@ export const UserButton = () => {
 
     const [signOut, { isLoading: isSignOutLoading }] = useSignOutMutation();
 
+    const isAuthenticated = Boolean(access_token);
     const { data, isLoading: isMemberLoading, refetch } = useGetMemberInfoQuery(undefined, {
+        skip: !isAuthenticated,
         refetchOnMountOrArgChange: true,
     });
 

@@ -58,7 +58,7 @@ export const SignInCard = () => {
         const errorData = error as any;
         const emailErrorMessage = errorData.data.errors.email
           ? errorData.data.errors.email[0]
-          : errorData.data.errors.password;
+          : errorData.data.errors.password || "Someting went wrong!";
         toast.error(emailErrorMessage);
       }
     }

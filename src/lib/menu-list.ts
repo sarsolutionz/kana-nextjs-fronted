@@ -16,6 +16,8 @@ import {
 
 import { useGetMemberInfoQuery } from "@/redux/features/auth/authApi";
 import { useGetDisplayUrlQuery } from "@/redux/features/vehicle/vehicleApi";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 type Submenu = {
   href: string;
@@ -38,15 +40,18 @@ type Group = {
 };
 
 export function GetMenuList(pathname: string): Group[] {
+  const access_token = useSelector((state: RootState) => state.auth.access_token?.access);
+  const isAuthenticated = Boolean(access_token);
   const { data: getRole } = useGetMemberInfoQuery(undefined, {
+    skip: !isAuthenticated,
     refetchOnMountOrArgChange: true,
   });
 
   const { data: getDisplay } = useGetDisplayUrlQuery({
     role: getRole?.role,
   }, {
-    refetchOnMountOrArgChange: true,
     skip: !getRole?.role,  // Skip query until role exists
+    refetchOnMountOrArgChange: true,
   });
 
   const availableItems = getDisplay?.data[0]?.items || [];

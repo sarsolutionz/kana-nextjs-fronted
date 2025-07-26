@@ -42,7 +42,7 @@ export function Sidebar() {
             href="/"
             className="flex items-center gap-2 pointer-events-none"
           >
-            <Image src="/logo.png" alt="logo" width={48} height={48} />
+            <Image src="/logo.png" alt="logo" width={48} height={48} priority />
             <div className="flex flex-col">
               <h1
                 className={cn(

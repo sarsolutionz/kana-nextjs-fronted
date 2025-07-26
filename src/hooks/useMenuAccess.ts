@@ -1,4 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import {
     UserPenIcon,
     Users,
@@ -10,12 +13,15 @@ import {
     Palette,
     AppWindow
 } from "lucide-react";
-import { useMemo } from "react";
+
 import { useGetMemberInfoQuery } from "@/redux/features/auth/authApi";
 import { useGetDisplayUrlQuery } from "@/redux/features/vehicle/vehicleApi";
 
 export const useMenuAccess = () => {
+    const access_token = useSelector((state: RootState) => state.auth.access_token?.access);
+    const isAuthenticated = Boolean(access_token);
     const { data: getRole } = useGetMemberInfoQuery(undefined, {
+        skip: !isAuthenticated,
         refetchOnMountOrArgChange: true,
     });
 
@@ -26,10 +32,20 @@ export const useMenuAccess = () => {
         refetchOnMountOrArgChange: true,
     });
 
-    const availableItems = useMemo(() =>
-        getDisplay?.data[0]?.items?.map((item: any) => item.toLowerCase()) || [],
-        [getDisplay]
-    );
+    // Initialize availableItems from localStorage if present
+    const [availableItems, setAvailableItems] = useState<string[]>(() => {
+        const storedItems = localStorage.getItem("availableItems");
+        return storedItems ? JSON.parse(storedItems) : [];
+    });
+
+    // Update availableItems when the `getDisplay` data changes
+    useEffect(() => {
+        if (getDisplay?.data?.length > 0) {
+            const fetchedItems = getDisplay.data[0]?.items?.map((item: any) => item.toLowerCase()) || [];
+            setAvailableItems(fetchedItems);
+            localStorage.setItem("availableItems", JSON.stringify(fetchedItems)); // Persist to localStorage
+        }
+    }, [getDisplay]);
 
     const isRouteAllowed = (pathname: string) => {
         const menuData = [

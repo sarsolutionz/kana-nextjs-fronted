@@ -9,7 +9,7 @@ export const Sidebar = () => {
     <aside className="h-full bg-neutral-100 p-4 w-full flex flex-col">
       <Link href="/">
         <div className="flex items-center space-x-2 p-1">
-          <Image src="/logo.png" alt="logo" width={48} height={48} />
+          <Image src="/logo.png" alt="logo" width={48} height={48} priority />
           <div className="flex flex-col">
             <h1 className="text-xl font-bold text-[#113e57]">Kana Logistics</h1>
             <p className="text-[#113e57] text-xs capitalize">

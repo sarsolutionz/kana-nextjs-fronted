@@ -49,16 +49,10 @@ export function UserNav() {
   const [signOut, { isLoading: isSignOutLoading }] = useSignOutMutation();
 
   const isAuthenticated = Boolean(access_token);
-  const { data, isLoading: isMemberLoading, refetch } = useGetMemberInfoQuery(undefined, {
+  const { data, isLoading: isMemberLoading } = useGetMemberInfoQuery(undefined, {
     skip: !isAuthenticated,
     refetchOnMountOrArgChange: true,
   });
-
-  useEffect(() => {
-    if (data) {
-      refetch();
-    }
-  }, [data, refetch]);
 
   const tokenExpiration = useMemo(() => {
     if (!access_token) return null;

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { Loader, Ellipsis, LogOut } from "lucide-react";
 
@@ -25,10 +25,10 @@ import { jwtDecode, JwtPayload } from "jwt-decode";
 
 import { RootState } from "@/redux/store";
 import { unSetMember } from "@/redux/features/auth/authSlice";
-import { unsetMemberInfo } from "@/redux/features/auth/memberSlice";
-import { useSignOutMutation } from "@/redux/features/auth/authApi";
+import { authApi, useSignOutMutation } from "@/redux/features/auth/authApi";
 import { useDispatch, useSelector } from "react-redux";
 
+import { unsetMemberInfo } from "@/redux/features/auth/memberSlice";
 import { CollapseMenuButton } from "@/components/admin-panel/collapse-menu-button";
 
 interface MenuProps {
@@ -36,12 +36,9 @@ interface MenuProps {
 }
 
 export function Menu({ isOpen }: MenuProps) {
-  const user = useSelector((state: RootState) => state.auth.user);
-  if (!user) redirect("/sign-in");
-
   const pathname = usePathname();
   const menuList = GetMenuList(pathname);
-  
+
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -76,6 +73,10 @@ export function Menu({ isOpen }: MenuProps) {
   }, [tokenExpiration]);
 
   const handleLogout = async () => {
+    dispatch(unSetMember());
+    dispatch(unsetMemberInfo({ email: "", name: "" }));
+    await dispatch(authApi.util.resetApiState());
+
     try {
       if (access_token) {
         await signOut(access_token);
@@ -83,13 +84,7 @@ export function Menu({ isOpen }: MenuProps) {
     } catch (error) {
       console.error("Failed to log out:", error);
     }
-    dispatch(unSetMember());
-    dispatch(
-      unsetMemberInfo({
-        email: "",
-        name: "",
-      })
-    );
+
     router.push("/sign-in");
     toast.success("Log out successfully");
   };
@@ -139,7 +134,7 @@ export function Menu({ isOpen }: MenuProps) {
                               variant={
                                 (active === undefined &&
                                   pathname.startsWith(href)) ||
-                                active
+                                  active
                                   ? "secondary"
                                   : "ghost"
                               }
