@@ -109,13 +109,13 @@ export const TransportSelector = ({
               variant="outline"
               role="combobox"
               aria-expanded={open}
-              className="w-[250px] justify-between"
+              className="w-full justify-between"
             >
               Select courier types...
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-[250px] p-0">
+          <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
             <Command>
               <CommandInput placeholder="Search courier types..." />
               <CommandList>

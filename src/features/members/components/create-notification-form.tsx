@@ -27,6 +27,15 @@ import { createNotificationSchema } from "../schemas";
 
 import { useCreateNotificationMutation } from "@/redux/features/vehicle/vehicleApi";
 import { TransportSelector } from "@/components/transport-selector";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { VehicleName } from "../types";
+
 interface CreateNotificationFormProps {
   id?: string;
   onCancel?: () => void;
@@ -46,6 +55,7 @@ export const CreateNotificationForm = ({
       weight: 1,
       message: "",
       contact: "",
+      model: VehicleName.BOLERO,
     },
   });
 
@@ -206,7 +216,37 @@ export const CreateNotificationForm = ({
                 </p>
               </div>
               <Separator className="bg-primary/10" />
-              <TransportSelector form={form} isLoading={isLoading} />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <TransportSelector form={form} isLoading={isLoading} />
+                <FormField
+                  control={form.control}
+                  name="model"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Select defaultValue={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select vehicle" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <FormMessage />
+                        <SelectContent>
+                          <SelectItem value={VehicleName.BOLERO}>Bolero</SelectItem>
+                          <SelectItem value={VehicleName.BADA_DOST}>
+                            Bada Dost
+                          </SelectItem>
+                          <SelectItem value={VehicleName.INTRA}>Intra</SelectItem>
+                          <SelectItem value={VehicleName.FOURTEEN_FT}>14 FT</SelectItem>
+                          <SelectItem value={VehicleName.SEVENTEEN_FT}>
+                            17 FT
+                          </SelectItem>
+                          <SelectItem value={VehicleName.TWENTY_FT}>20 FT</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <FormField
               name="message"
