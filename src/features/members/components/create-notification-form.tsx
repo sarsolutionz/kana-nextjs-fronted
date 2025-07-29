@@ -55,7 +55,7 @@ export const CreateNotificationForm = ({
       weight: 1,
       message: "",
       contact: "",
-      model: VehicleName.BOLERO,
+      model: undefined,
     },
   });
 

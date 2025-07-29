@@ -47,7 +47,7 @@ export const DataFilters = ({ creators }: DataFiltersProps) => {
                     <SelectSeparator />
                     <SelectItem value={NotificationStatus.DONE}>Done</SelectItem>
                     <SelectItem value={NotificationStatus.IN_PROGRESS}>Progress</SelectItem>
-                    <SelectItem value={NotificationStatus.REJECTED}>Rejected</SelectItem>
+                    {/* <SelectItem value={NotificationStatus.REJECTED}>Rejected</SelectItem> */}
                 </SelectContent>
             </Select>
             <Select

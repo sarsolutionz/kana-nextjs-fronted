@@ -31,7 +31,7 @@ export const apiSchema = z.object({
 });
 
 export const createNotificationSchema = z.object({
-    model: z.nativeEnum(VehicleName),
+    model: z.nativeEnum(VehicleName, { required_error: "Required" }),
     source: z.string().min(1, "Required"),
     destination: z.string().min(1, "Required"),
     rate: z.number().min(1, "Required"),

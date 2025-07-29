@@ -69,12 +69,17 @@ export const TransportSelector = ({
 
   // Update textarea whenever selectedOptions changes
   useEffect(() => {
+    if (selectedOptions.length === 0) {
+      form.setValue("message", "");
+      return;
+    }
+
     const selectedItemsText = selectedOptions
       .map((opt) => transportOptions.find((o) => o.value === opt)?.label)
       .filter(Boolean)
       .join(", ");
 
-    const newValue = `${STATIC_INSTRUCTIONS}${selectedItemsText || "None"}`;
+    const newValue = `${STATIC_INSTRUCTIONS}${selectedItemsText}`;
     form.setValue("message", newValue);
   }, [selectedOptions, form]);
 
