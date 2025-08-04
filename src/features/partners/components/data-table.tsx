@@ -46,6 +46,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
     disabled,
     path,
 }: DataTableProps<TData, TValue>) {
+    const tableBodyRef = React.useRef<HTMLTableSectionElement>(null);
     const router = useRouter();
     const [ConfrimDialog, confirm] = useConfirm(
         "Are you sure?",
@@ -87,6 +88,13 @@ export function DataTable<TData extends { id: string | number }, TValue>({
             columnFilters,
         },
     });
+
+    const handleWheel = (e: React.WheelEvent) => {
+        if (tableBodyRef.current) {
+            tableBodyRef.current.scrollLeft += e.deltaY * 0.5;
+            e.preventDefault();
+        }
+    };
 
     return (
         <div>
@@ -144,7 +152,7 @@ export function DataTable<TData extends { id: string | number }, TValue>({
                             </TableRow>
                         ))}
                     </TableHeader>
-                    <TableBody>
+                    <TableBody ref={tableBodyRef} onWheel={handleWheel}>
                         {table.getRowModel().rows?.length ? (
                             table.getRowModel().rows.map((row) => (
                                 <TableRow

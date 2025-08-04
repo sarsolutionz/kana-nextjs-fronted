@@ -69,7 +69,7 @@ export const SignInCard = () => {
   };
 
   return (
-    <Card className="w-full h-full md:w-[487px] border-none shadow-none lg:rounded-none">
+    <Card className="w-full h-full md:w-[487px] border-none shadow-none lg:rounded-l-xl lg:rounded-r-none">
       <CardHeader className="flex items-center justify-center text-center p-7">
         <CardTitle className="text-2xl">Welcome back!</CardTitle>
         <CardDescription>
@@ -140,7 +140,7 @@ export const SignInCard = () => {
         <p className="py-3 text-muted-foreground">
           Don&apos;t have an account?
           <Link href={"/sign-up"}>
-            <span className="hover:underline text-black">&nbsp;Sign Up</span>
+            <span className="hover:underline text-black dark:text-gray-300">&nbsp;Sign Up</span>
           </Link>
         </p>
       </CardContent>

@@ -66,7 +66,7 @@ export const SignUpCard = () => {
   };
 
   return (
-    <Card className="w-full h-full md:w-[487px] border-none shadow-none lg:rounded-none">
+    <Card className="w-full h-full md:w-[487px] border-none shadow-none lg:rounded-l-xl lg:rounded-r-none">
       <CardHeader className="flex items-center justify-center text-center p-7">
         <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>
@@ -177,17 +177,17 @@ export const SignUpCard = () => {
         <CardDescription>
           By clicking continue, you agree to our{" "}
           <Link href="/privacy">
-            <span className="text-black hover:underline">Terms of Service</span>
+            <span className="text-black hover:underline dark:text-gray-300">Terms of Service</span>
           </Link>{" "}
           and{" "}
           <Link href="/terms">
-            <span className="text-black hover:underline">Privacy Policy.</span>
+            <span className="text-black hover:underline dark:text-gray-300">Privacy Policy.</span>
           </Link>
         </CardDescription>
         <p className="p-3 text-muted-foreground">
           Already have an account?
           <Link href={"/sign-in"}>
-            <span className="hover:underline text-black">&nbsp;Sign In</span>
+            <span className="hover:underline text-black dark:text-gray-300">&nbsp;Sign In</span>
           </Link>
         </p>
       </CardContent>

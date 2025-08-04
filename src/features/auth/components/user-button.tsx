@@ -62,16 +62,17 @@ export const UserButton = () => {
     useEffect(() => {
         if (!tokenExpiration) return;
 
-        const timeLeft = tokenExpiration - Date.now();
-        if (timeLeft <= 0) {
-            handleLogout();
-        } else {
-            const timeout = setTimeout(() => {
-                handleLogout();
-            }, timeLeft);
+        const checkToken = () => {
+            const now = Date.now();
+            const timeLeft = tokenExpiration - now;
 
-            return () => clearTimeout(timeout); // Cleanup timer
-        }
+            if (timeLeft <= 0) {
+                handleLogout();
+            }
+        };
+        checkToken();
+        const interval = setInterval(checkToken, 60 * 1000);
+        return () => clearInterval(interval);
     }, [tokenExpiration]);
 
     const handleLogout = async () => {
