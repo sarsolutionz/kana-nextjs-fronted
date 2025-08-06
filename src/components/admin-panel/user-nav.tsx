@@ -70,8 +70,6 @@ export function UserNav() {
     const checkToken = () => {
       const now = Date.now();
       const timeLeft = tokenExpiration - now;
-      console.log(timeLeft);
-      
 
       if (timeLeft <= 0) {
         handleLogout();
