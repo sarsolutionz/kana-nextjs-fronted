@@ -254,7 +254,7 @@ const columns: ColumnDef<z.infer<typeof dashboardFormSchema>>[] = [
     header: "Load_created",
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5 capitalize">
-        {row.original.created_by}
+        {row.original.created_by?.name ?? "Unknown"}
       </Badge>
     ),
     enableHiding: false,
