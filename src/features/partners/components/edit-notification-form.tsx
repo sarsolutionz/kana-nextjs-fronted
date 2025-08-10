@@ -69,7 +69,7 @@ export const EditNotioficationForm = ({
     const message = data?.message ?? undefined;
 
     useEffect(() => {
-        if (status === 201) {
+        if (status === 200) {
             summary?.refetch();
             toast.success(message);
             onCancel?.();
