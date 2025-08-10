@@ -55,7 +55,7 @@ export const EditNotioficationForm = ({
         defaultValues: initialValues,
     });
 
-    const [editNotificationById, { isSuccess, isLoading: editNotificationIsLoading, error: editNotificationError, data }] = useEditNotificationByIdMutation();
+    const [editNotificationById, { isLoading: editNotificationIsLoading, error: editNotificationError, data }] = useEditNotificationByIdMutation();
     const error = notificationError || editNotificationError;
     const isLoading = notificationLoading || editNotificationIsLoading;
 
@@ -65,16 +65,25 @@ export const EditNotioficationForm = ({
         }
     }, [initialValues, form]);
 
+    const status = data?.status ?? undefined;
+    const message = data?.message ?? undefined;
+
     useEffect(() => {
-        if (isSuccess && data?.message) {
+        if (status === 201) {
             summary?.refetch();
-            toast.success("Notification updated successfully.");
+            toast.success(message);
             onCancel?.();
         }
-        if (error && "data" in error) {
-            toast.error("Something went wrong");
+        if (status === 400) {
+            toast.error(message)
+            onCancel?.();
         }
-    }, [isSuccess, error, summary, data, onCancel]);
+        if (error && 'status' in error) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const errorData = (error.data as any)?.detail;
+            toast.error(errorData);
+        }
+    }, [error, summary, data, onCancel]);
 
     const onSubmit = async (values: z.infer<typeof dashboardFormSchema>) => {
         const modifiedValues = {
