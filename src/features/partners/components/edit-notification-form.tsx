@@ -71,7 +71,7 @@ export const EditNotioficationForm = ({
     useEffect(() => {
         if (status === 200) {
             summary?.refetch();
-            toast.success(message);
+            toast.success("Notification Updated Successfully");
             onCancel?.();
         }
         if (status === 400) {
