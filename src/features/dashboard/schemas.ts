@@ -4,7 +4,7 @@ export const Creators = z.object({
   id: z.string(),
   email: z.string(),
   name: z.string(),
-  number: z.string(),
+  number:  z.string().nullable().optional(),
 });
 
 export const dashboardFormSchema = z.object({
